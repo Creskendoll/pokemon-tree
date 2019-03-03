@@ -46,12 +46,14 @@ public class Tree {
      
         return current;
     }
-
     public void add(Color color, ColorEnum type) {
         root = addRecursive(root, color, type);
     }
 
-    public ArrayList<Color> traverseInOrder(Node node) {
+    public ArrayList<Color> traverseInOrder() {
+        return this.traverseInOrder(this.root);
+    }
+    private ArrayList<Color> traverseInOrder(Node node) {
         ArrayList<Color> result = new ArrayList<Color>();     
 
         if (node != null) {
@@ -60,26 +62,34 @@ public class Tree {
             result.addAll(traverseInOrder(node.right));
         }
 
-        return result;
+        return result;    
     }
-    public ArrayList<Color> traversePreOrder(Node node) {
+
+    public ArrayList<Color> traversePreOrder() {
+        return this.traversePreOrder(this.root);
+    }
+    private ArrayList<Color> traversePreOrder(Node node) {
         ArrayList<Color> result = new ArrayList<Color>();     
 
         if (node != null) {
-            result.addAll(traversePreOrder(node.left));
             result.add(node.color);
+            result.addAll(traversePreOrder(node.left));
             result.addAll(traversePreOrder(node.right));
         }
 
         return result;
     }
-    public ArrayList<Color> traversePostOrder(Node node) {
+
+    public ArrayList<Color> traversePostOrder() {
+        return this.traversePostOrder(this.root);
+    }
+    private ArrayList<Color> traversePostOrder(Node node) {
         ArrayList<Color> result = new ArrayList<Color>();     
 
         if (node != null) {
             result.addAll(traversePostOrder(node.left));
-            result.add(node.color);
             result.addAll(traversePostOrder(node.right));
+            result.add(node.color);
         }
 
         return result;

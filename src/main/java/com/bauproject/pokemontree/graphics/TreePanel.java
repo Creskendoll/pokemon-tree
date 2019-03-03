@@ -23,7 +23,7 @@ public class TreePanel extends JPanel {
         int node_width = 20;
         int node_index = 0;
         // TODO: make this draw a tree
-        for(Color color : colorTree.traverseInOrder(colorTree.getRoot())) {
+        for(Color color : colorTree.traverseInOrder()) {
             g.setColor(color.toJavaColor());
             g.fillOval((node_index * node_width) % getWidth(), ((node_index*node_height) / getWidth()) *node_height, node_width, node_height);
             
