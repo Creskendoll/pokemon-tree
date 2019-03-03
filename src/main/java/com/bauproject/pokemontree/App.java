@@ -1,8 +1,12 @@
 package com.bauproject.pokemontree;
 
+import com.bauproject.pokemontree.graphics.*;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import org.json.simple.parser.ParseException;
 import org.json.simple.JSONArray;
@@ -16,6 +20,7 @@ public class App
         // JSON file path
         String filePath = "./data.json";
         JSONParser parser = new JSONParser();
+        Tree colorTree = new Tree();
 
         try {
             // Read JSON as array
@@ -35,10 +40,20 @@ public class App
                 JSONArray dom_color_JSON = (JSONArray) imgObject.get("dominant_color");
                 Color dom_color = new Color(dom_color_JSON);
                 
+                // Add the color to tree
+                colorTree.add(avgColor, ColorEnum.BRIGHTNESS);
                 System.out.println(img_name);
                 System.out.println(avgColor);
                 System.out.println(dom_color);
             }
+            
+            // Init and draw the tree 
+            JFrame frame = new JFrame("Color Tree");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JPanel colorTreePanel = new TreePanel(colorTree);
+            frame.setSize(500, 500);
+            frame.add(colorTreePanel);
+            frame.setVisible(true);
         } catch (FileNotFoundException e) {
             System.out.printf("File can not be found: %s\n", filePath);
             e.printStackTrace(System.out);

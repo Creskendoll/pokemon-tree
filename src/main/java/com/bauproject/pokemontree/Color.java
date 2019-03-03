@@ -89,4 +89,8 @@ public class Color {
     public String toString() {
         return String.format("{ RED: %f, GREEN: %f, BLUE: %f }", this.red, this.green, this.blue);
     }
+
+    public java.awt.Color toJavaColor() {
+        return new java.awt.Color(this.red/255f, this.green/255f, this.blue/255f);
+    }
 }
