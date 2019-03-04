@@ -7,6 +7,10 @@
   <version>1.0</version>
   <name>pokemon-tree</name>
   <url>http://maven.apache.org</url>
+  <properties>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+  </properties>
   <dependencies>
     <dependency>
         <groupId>com.googlecode.json-simple</groupId>
