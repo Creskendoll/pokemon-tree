@@ -37,20 +37,23 @@ public class App
                 Color avgColor = new Color(avg_color_JSON);
                 
                 // Dominant color
-                JSONArray dom_color_JSON = (JSONArray) imgObject.get("dominant_color");
-                Color dom_color = new Color(dom_color_JSON);
+                // JSONArray dom_color_JSON = (JSONArray) imgObject.get("dominant_color");
+                // Color dom_color = new Color(dom_color_JSON);
                 
-                // Add the color to tree
-                colorTree.add(avgColor, ColorEnum.BRIGHTNESS);
-                System.out.println(img_name);
-                System.out.println(avgColor);
-                System.out.println(dom_color);
+                // Add the color to tree 
+                // colorTree.add(avgColor, ColorEnum.BRIGHTNESS);
+                colorTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS);
+                
+                // System.out.println(img_name);
+                // System.out.println(avgColor);
+                // System.out.println(dom_color);
             }
             
             // Init and draw the tree 
             JFrame frame = new JFrame("Color Tree");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             JPanel colorTreePanel = new TreePanel(colorTree);
+            System.out.println(colorTree);
             frame.setSize(500, 500);
             frame.add(colorTreePanel);
             frame.setVisible(true);
