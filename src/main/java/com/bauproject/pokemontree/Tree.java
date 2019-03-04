@@ -13,6 +13,25 @@ public class Tree {
         return root;
     }
 
+    // ======================== MISC ========================
+    public int maxDepth() {
+        return this.maxDepth(this.root);
+    }
+    private int maxDepth(Node node) { 
+       if (node==null) {
+           return 0;
+       } else {
+           /* compute the depth of each subtree */
+           int lDepth = maxDepth(node.left); 
+           int rDepth = maxDepth(node.right); 
+      
+           /* use the larger one */
+           if (lDepth > rDepth) return(lDepth+1); 
+           else return(rDepth+1); 
+       }
+    }
+      
+
     // ======================== Add methods ========================
 
     // Add without image name
@@ -57,9 +76,9 @@ public class Tree {
     private Node addRecursive(Node current, Color color, String imgName, ColorEnum type) {
         if (current == null) {
             // Read image files
-            // return new Node(color, imgName);
+            return new Node(color, imgName);
             // Don't read image files 
-            return new Node(color);
+            // return new Node(color);
         }
         
         ColorEnum result = null;
@@ -93,6 +112,48 @@ public class Tree {
     }
     public void add(Color color, String imgName, ColorEnum type) {
         this.root = addRecursive(this.root, color, imgName, type);
+    }
+
+    // Add with image name
+    private Node addRecursive(Node current, Color color, String imgName, ColorEnum type, int index, int depth) {
+        if (current == null) {
+            // Read image files
+            return new Node(color, imgName, index, depth);
+            // Don't read image files 
+            // return new Node(color);
+        }
+        
+        ColorEnum result = null;
+        switch (type) {
+            case BRIGHTNESS:
+                result = current.color.compareBrightness(color);
+                break;
+            case SATURATION:
+                result = current.color.compareSaturation(color);
+                break;
+            case HUE:
+                result = current.color.compareHue(color);
+                break;
+            default:
+                result = ColorEnum.EQUAL;
+                break;
+        }
+
+        if (result == ColorEnum.LOWER) {
+            current.left = addRecursive(current.left, color, imgName, type, (current.getIndex() * 2) - 1, depth + 1);
+        } else if (result == ColorEnum.HIGHER) {
+            current.right = addRecursive(current.right, color, imgName, type, current.getIndex() * 2, depth + 1);
+        } else {
+            // value already exists
+            current.left = addRecursive(current.left, color, imgName, type, (current.getIndex() * 2) - 1, depth + 1);
+            // Results in less nodes
+            // return current;
+        }
+        
+        return current;
+    }
+    public void add(Color color, String imgName, ColorEnum type, int index, int depth) {
+        this.root = addRecursive(this.root, color, imgName, type, index, depth);
     }
 
     // ======================== Traverse methods ========================
