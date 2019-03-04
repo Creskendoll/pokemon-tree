@@ -56,7 +56,10 @@ public class Tree {
     // Add with image name
     private Node addRecursive(Node current, Color color, String imgName, ColorEnum type) {
         if (current == null) {
-            return new Node(color, imgName);
+            // Read image files
+            // return new Node(color, imgName);
+            // Don't read image files 
+            return new Node(color);
         }
         
         ColorEnum result = null;
@@ -93,29 +96,29 @@ public class Tree {
     }
 
     // ======================== Traverse methods ========================
-    public ArrayList<Color> traverseInOrder() {
+    public ArrayList<Node> traverseInOrder() {
         return this.traverseInOrder(this.root);
     }
-    private ArrayList<Color> traverseInOrder(Node node) {
-        ArrayList<Color> result = new ArrayList<Color>();     
+    private ArrayList<Node> traverseInOrder(Node node) {
+        ArrayList<Node> result = new ArrayList<Node>();     
 
         if (node != null) {
             result.addAll(traverseInOrder(node.left));
-            result.add(node.color);
+            result.add(node);
             result.addAll(traverseInOrder(node.right));
         }
 
         return result;    
     }
 
-    public ArrayList<Color> traversePreOrder() {
+    public ArrayList<Node> traversePreOrder() {
         return this.traversePreOrder(this.root);
     }
-    private ArrayList<Color> traversePreOrder(Node node) {
-        ArrayList<Color> result = new ArrayList<Color>();     
+    private ArrayList<Node> traversePreOrder(Node node) {
+        ArrayList<Node> result = new ArrayList<Node>();     
 
         if (node != null) {
-            result.add(node.color);
+            result.add(node);
             result.addAll(traversePreOrder(node.left));
             result.addAll(traversePreOrder(node.right));
         }
@@ -123,16 +126,16 @@ public class Tree {
         return result;
     }
 
-    public ArrayList<Color> traversePostOrder() {
+    public ArrayList<Node> traversePostOrder() {
         return this.traversePostOrder(this.root);
     }
-    private ArrayList<Color> traversePostOrder(Node node) {
-        ArrayList<Color> result = new ArrayList<Color>();     
+    private ArrayList<Node> traversePostOrder(Node node) {
+        ArrayList<Node> result = new ArrayList<Node>();     
 
         if (node != null) {
             result.addAll(traversePostOrder(node.left));
             result.addAll(traversePostOrder(node.right));
-            result.add(node.color);
+            result.add(node);
         }
 
         return result;
