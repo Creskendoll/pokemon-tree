@@ -1,5 +1,6 @@
 package com.bauproject.pokemontree;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,11 +14,10 @@ public class Node {
     String imgName;
     Node left;
     Node right;
-    // TODO: Should we keep the files inside nodes?
     BufferedImage image = null;
     Path tile_folder_path = Paths.get("images\\");
-    int depth;
-    int index;
+    long depth;
+    long index;
  
     Node(Color color) {
         this.color = color;
@@ -38,7 +38,7 @@ public class Node {
             e.printStackTrace();
         }
     }
-    Node(Color color, String imgName, int index, int depth) {
+    Node(Color color, String imgName, long index, long depth) {
         this.color = color;
         this.imgName = imgName;
         this.index = index;
@@ -55,17 +55,17 @@ public class Node {
         }
     }
 
-    public int[] getPosition(int canvasWidth, int canvasHeight, int maxDepth) {
-        int x = this.getIndex() * canvasWidth / ( ((int)Math.pow(2, this.getDepth()) + 1) );
-        int y = this.getDepth() * canvasHeight / (maxDepth);
-        return new int[]{x, y};
+    public Point getPosition(int canvasWidth, int canvasHeight, int maxDepth) {
+        int x = (int)(this.getIndex() * canvasWidth / ( ((int)Math.pow(2, this.getDepth()) + 1) ));
+        int y = (int)(this.getDepth() * canvasHeight / maxDepth);
+        return new Point(x, y);
     }
 
-    public int getIndex() {
+    public long getIndex() {
         return this.index;
     }
 
-    public int getDepth() {
+    public long getDepth() {
         return this.depth;
     }
 
