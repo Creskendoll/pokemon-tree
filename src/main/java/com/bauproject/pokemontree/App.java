@@ -42,7 +42,8 @@ public class App
                 
                 // Add the color to tree 
                 // colorTree.add(avgColor, ColorEnum.BRIGHTNESS);
-                colorTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS);
+                // colorTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS);
+                colorTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
                 
                 // System.out.println(img_name);
                 // System.out.println(avgColor);
@@ -54,7 +55,7 @@ public class App
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             JPanel colorTreePanel = new TreePanel(colorTree);
             System.out.println(colorTree);
-            frame.setSize(500, 500);
+            frame.setSize(1920, 1080);
             frame.add(colorTreePanel);
             frame.setVisible(true);
         } catch (FileNotFoundException e) {
