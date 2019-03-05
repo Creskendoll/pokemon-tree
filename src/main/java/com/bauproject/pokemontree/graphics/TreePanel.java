@@ -16,6 +16,7 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 /**
@@ -39,13 +40,13 @@ public class TreePanel extends JPanel {
     int canvasHeight = 2000;
 
 
-    public TreePanel(Tree colorTree) {
+    public TreePanel(Tree colorTree, JFrame f) {
         this.colorTree = colorTree;
         this.treeDepth = colorTree.maxDepth();
         this.inOrderList = colorTree.traverseInOrder();
         this.preOrderList = colorTree.traversePreOrder();
         this.postOrderList = colorTree.traversePostOrder();
-        final JPanel that = this;
+        final JFrame frame = f;
         this.addMouseWheelListener(new MouseAdapter() {
 
             @Override
@@ -56,12 +57,17 @@ public class TreePanel extends JPanel {
                     scale = 1;
                 
                 Point mouse_location = MouseInfo.getPointerInfo().getLocation();
+                Point windowLocation = frame.getLocation();
+                // Point frameCenter = new Point((int)frame.getLocation().getX() + getWidth()/2, (int)frame.getLocation().getY() + getHeight()/2);
+                Point frameCenter = new Point((int)frame.getLocation().getX() + getWidth()/2, (int)frame.getLocation().getY() + getHeight()/2);
+                double dx = mouse_location.getX() - frameCenter.getX();
+                double dy = mouse_location.getY() - frameCenter.getY();
                 
-                Point windowLocation = that.getLocation();
                 System.out.printf("Mouse X:%.2f\nMouse Y:%.2f\n", mouse_location.getX(), mouse_location.getY());
                 System.out.printf("Window X:%.2f\nWindow Y:%.2f\n", windowLocation.getX(), windowLocation.getY());
-                at.translate(mouse_location.getX(), mouse_location.getY());
+                System.out.printf("Delta X:%.2f\nDelta Y:%.2f\n", dx, dy);
                 at.setToScale(scale, scale);
+                at.translate(-dx, -dy);
                 revalidate();
                 repaint();
             }

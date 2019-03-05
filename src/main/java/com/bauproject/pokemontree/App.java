@@ -75,14 +75,14 @@ public class App {
                     // Init and draw the tree
                     JFrame frame = new JFrame("Color Tree");
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    JPanel colorTreePanel = new TreePanel(colorTree);
+                    JPanel colorTreePanel = new TreePanel(colorTree, frame);
                     // System.out.println(colorTree);
                     // frame.add(colorTreePanel);
 
                     frame.setLayout(new BorderLayout());
                     frame.add(new JScrollPane(colorTreePanel));
                     frame.pack();
-                    // frame.setLocationRelativeTo(null);
+                    frame.setLocationRelativeTo(null);
                     frame.setVisible(true);
 
                 } catch (FileNotFoundException e) {
