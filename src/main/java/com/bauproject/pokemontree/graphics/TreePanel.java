@@ -19,9 +19,6 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-/**
- * TreePanel
- */
 public class TreePanel extends JPanel {
     private static final long serialVersionUID = -7101644392759127265L;
     Tree colorTree;
@@ -63,19 +60,20 @@ public class TreePanel extends JPanel {
                 double dx = mouse_location.getX() - frameCenter.getX();
                 double dy = mouse_location.getY() - frameCenter.getY();
                 
-                System.out.printf("Mouse X:%.2f\nMouse Y:%.2f\n", mouse_location.getX(), mouse_location.getY());
-                System.out.printf("Window X:%.2f\nWindow Y:%.2f\n", windowLocation.getX(), windowLocation.getY());
+                // System.out.printf("Mouse X:%.2f\nMouse Y:%.2f\n", mouse_location.getX(), mouse_location.getY());
+                // System.out.printf("Window X:%.2f\nWindow Y:%.2f\n", windowLocation.getX(), windowLocation.getY());
                 System.out.printf("Delta X:%.2f\nDelta Y:%.2f\n", dx, dy);
+                // at.translate(-dx, -dy);
+                at.translate(100f, 100f);
                 at.setToScale(scale, scale);
-                at.translate(-dx, -dy);
                 revalidate();
                 repaint();
             }
         });
-
-
+        
+        
         this.addMouseListener(new MouseAdapter() {
-
+            
             @Override
             public void mousePressed(MouseEvent e) {
                 mousePt = e.getPoint();
@@ -83,7 +81,7 @@ public class TreePanel extends JPanel {
             }
         });
         this.addMouseMotionListener(new MouseMotionAdapter() {
-
+            
             @Override
             public void mouseDragged(MouseEvent e) {
                 int dx = e.getX() - mousePt.x;
@@ -110,8 +108,6 @@ public class TreePanel extends JPanel {
         super.paintComponent(g);
         g.setColor(Color.darkGray);
         g.fillRect(0, 0, canvasWidth, canvasHeight);
-        int node_height = 25;
-        int node_width = 25;
         int img_width =  (int)(30f * scale);
         int img_height = (int)(30f * scale);
 
@@ -142,10 +138,10 @@ public class TreePanel extends JPanel {
             // int img_Y = (((node_index * img_height) / (int) Math.ceil((double)(getWidth() - img_width))) * img_height);
             
             // Draw nodes
-            // g.setColor(node.getColor().toJavaColor());
+            g2.setColor(node.getColor().toJavaColor());
             // g.fillOval(img_X, img_Y, node_width, node_height);
-            // g.fillOval(tree_node_x, tree_node_y, node_width, node_height);
-            g2.drawImage(node.getImage(), node_X, node_Y, img_width, img_height, this);        
+            g2.fillOval(node_X, node_Y, img_width, img_height);
+            // g2.drawImage(node.getImage(), node_X, node_Y, img_width, img_height, this);        
             
             // String debugInfo = "Depth: " + String.valueOf(node.getDepth()) + "  Index: " + String.valueOf(node.getIndex()); 
             // g.drawString(debugInfo, tree_node_x, tree_node_y + node_height+20);

@@ -15,7 +15,7 @@ public class Node {
     Node left;
     Node right;
     BufferedImage image = null;
-    Path tile_folder_path = Paths.get("images\\");
+    Path tile_folder_path = Paths.get("src\\images\\");
     long depth;
     long index;
  
@@ -34,7 +34,7 @@ public class Node {
             File imageFile = new File(img_file_path);
             this.image = ImageIO.read(imageFile);
         } catch (IOException e) {
-            System.out.printf("Error reading file: %s", tile_folder_path.toAbsolutePath());
+            System.out.printf("Error reading file: %s", tile_folder_path.toAbsolutePath().toString() + imgName);
             e.printStackTrace();
         }
     }
@@ -50,9 +50,16 @@ public class Node {
             File imageFile = new File(img_file_path);
             this.image = ImageIO.read(imageFile);
         } catch (IOException e) {
-            System.out.printf("Error reading file: %s", tile_folder_path.toAbsolutePath());
+            System.out.printf("Error reading file: %s", tile_folder_path.toAbsolutePath() +"\\"+ imgName);
             e.printStackTrace();
         }
+    }
+    Node(Color color, long index, long depth) {
+        this.color = color;
+        this.index = index;
+        this.depth = depth;
+        this.right = null;
+        this.left = null;
     }
 
     public Point getPosition(int canvasWidth, int canvasHeight, int maxDepth) {

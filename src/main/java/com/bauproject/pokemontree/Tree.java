@@ -118,9 +118,9 @@ public class Tree {
     private Node addRecursive(Node current, Color color, String imgName, ColorEnum type, long index, long depth) {
         if (current == null) {
             // Read image files
-            return new Node(color, imgName, index, depth);
+            // return new Node(color, imgName, index, depth);
             // Don't read image files 
-            // return new Node(color);
+            return new Node(color, index, depth);
         }
         
         ColorEnum result = null;
