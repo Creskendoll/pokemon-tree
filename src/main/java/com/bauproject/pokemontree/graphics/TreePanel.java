@@ -14,6 +14,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -23,7 +24,7 @@ public class TreePanel extends JPanel {
     private float scale = 1;
     private Point mousePt;
     AffineTransform at = new AffineTransform();
-    
+
     private static final int W = 1360;
     private static final int H = 720;
 
@@ -130,8 +131,8 @@ public class TreePanel extends JPanel {
             // Draw nodes
             g2.setColor(node.getColor().toJavaColor());
             // g.fillOval(img_X, img_Y, node_width, node_height);
-            g2.fillOval(node_X, node_Y, img_width, img_height);
-            // g2.drawImage(node.getImage(), node_X, node_Y, img_width, img_height, this);        
+            // g2.fillOval(node_X, node_Y, img_width, img_height);
+            g2.drawImage(node.getImage(), node_X, node_Y, img_width, img_height, this);        
             
             // String debugInfo = "Depth: " + String.valueOf(node.getDepth()) + "  Index: " + String.valueOf(node.getIndex()); 
             // g.drawString(debugInfo, tree_node_x, tree_node_y + node_height+20);

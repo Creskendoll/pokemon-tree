@@ -1,5 +1,7 @@
 package com.bauproject.pokemontree.structures;
 
+import java.util.ArrayList;
+
 // https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
 // Java program for insertion in AVL Tree 
 public class AVLTree extends Tree { 
@@ -44,8 +46,12 @@ public class AVLTree extends Tree {
 		y.left = T2; 
 
 		// Update heights 
-		y.depth = max(height(y.left), height(y.right)) + 1; 
-		x.depth = max(height(x.left), height(x.right)) + 1; 
+		y.height = max(height(y.left), height(y.right)) + 1; 
+		x.height = max(height(x.left), height(x.right)) + 1; 
+
+		// Update node positions
+		// x.right.depth = y.depth;
+		// y.left.depth = T2.depth;
 
 		// Return new root 
 		return x; 
@@ -62,8 +68,12 @@ public class AVLTree extends Tree {
 		x.right = T2; 
 
 		// Update heights 
-		x.depth = max(height(x.left), height(x.right)) + 1; 
-		y.depth = max(height(y.left), height(y.right)) + 1; 
+		x.height = max(height(x.left), height(x.right)) + 1; 
+		y.height = max(height(y.left), height(y.right)) + 1;
+
+		// Update node positions
+		// y.left.depth = x.depth;
+		// x.right.depth = T2.depth;
 
 		// Return new root 
 		return y; 
@@ -148,7 +158,10 @@ public class AVLTree extends Tree {
     @Override
     public void add(Color color, String imgName, ColorEnum type, int index, int depth) {
         this.root = addRecursive(this.root, color, imgName, type, index, depth);
+	}
+	@Override
+    public ArrayList<Node> toList() {
+        return this.traverseInOrder(this.root);
     }
-
 } 
 // This code has been contributed by Mayank Jaiswal 

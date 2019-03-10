@@ -43,7 +43,7 @@ public class App {
                         Color avgColor = new Color(avg_color_JSON);
 
                         // Add the color to tree
-                        // Data.avlTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
+                        Data.avlTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
                         Data.bstTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
                     }
 
@@ -61,7 +61,7 @@ public class App {
                     }
 
                     Frame frame = new Frame();
-                    frame.show(TreeEnum.BST);
+                    frame.show(TreeEnum.AVL);
 
                 } catch (FileNotFoundException e) {
                     System.out.printf("File can not be found: %s\n", filePath);

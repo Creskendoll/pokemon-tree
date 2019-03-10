@@ -21,14 +21,6 @@ public class Color {
         this.blue = B;    
         this.alpha = A;
     }
-    // public Color(ArrayList<Float> colors) {
-    //     this.red = colors.get(0);
-    //     this.green = colors.get(1);
-    //     this.blue = colors.get(2);
-    //     if (colors.get(3) != null) {
-    //         this.alpha = colors.get(3);
-    //     } 
-    // }
     public Color(JSONArray colors) {
         ArrayList<Float> color_arr = new ArrayList<Float>();     
                 

@@ -6,5 +6,8 @@ public enum ColorEnum {
     HIGHER,
     BRIGHTNESS,
     HUE,
-    SATURATION
+    SATURATION,
+    RED,
+    GREEN,
+    BLUE
 }
