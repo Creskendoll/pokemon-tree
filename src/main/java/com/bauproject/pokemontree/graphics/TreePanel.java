@@ -1,8 +1,7 @@
 package com.bauproject.pokemontree.graphics;
 
-import com.bauproject.pokemontree.Node;
-import com.bauproject.pokemontree.Tree;
-import com.bauproject.pokemontree.TreeEnum;
+import com.bauproject.pokemontree.structures.*;
+import com.bauproject.pokemontree.Data;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,37 +14,26 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class TreePanel extends JPanel {
     private static final long serialVersionUID = -7101644392759127265L;
-    Tree colorTree;
     int treeDepth;
-    ArrayList<Node> inOrderList;
-    ArrayList<Node> preOrderList;
-    ArrayList<Node> postOrderList;
-    ArrayList<Node> listInUse;
     private float scale = 1;
     private Point mousePt;
     AffineTransform at = new AffineTransform();
     
-    private static final int W = 1366;
+    private static final int W = 1360;
     private static final int H = 720;
 
-    int canvasWidth = 4000;
+    int canvasWidth = 5000;
     int canvasHeight = 2000;
 
-    public TreePanel(Tree colorTree, JFrame f) {
-        this.colorTree = colorTree;
-        this.treeDepth = colorTree.maxDepth();
-        this.inOrderList = colorTree.traverseInOrder();
-        this.preOrderList = colorTree.traversePreOrder();
-        this.postOrderList = colorTree.traversePostOrder();
-        this.listInUse = this.inOrderList;
+    public TreePanel(JFrame f) {
+        this.treeDepth = Data.visibleTree.maxDepth();
         final JFrame frame = f;
+
         this.addMouseWheelListener(new MouseAdapter() {
 
             @Override
@@ -64,10 +52,11 @@ public class TreePanel extends JPanel {
                 
                 // System.out.printf("Mouse X:%.2f\nMouse Y:%.2f\n", mouse_location.getX(), mouse_location.getY());
                 // System.out.printf("Window X:%.2f\nWindow Y:%.2f\n", windowLocation.getX(), windowLocation.getY());
-                System.out.printf("Delta X:%.2f\nDelta Y:%.2f\n", dx, dy);
-                // at.translate(-dx, -dy);
-                at.translate(100f, 100f);
-                at.setToScale(scale, scale);
+                AffineTransform _at = new AffineTransform();
+                _at.setToScale(scale, scale);
+                _at.translate(-dx*1/scale, -dy*1/scale);
+                // System.out.printf("Delta X:%.2f\nDelta Y:%.2f\n", dx, dy);
+                at = _at;
                 revalidate();
                 repaint();
             }
@@ -95,7 +84,6 @@ public class TreePanel extends JPanel {
         });
     }
 
-
     @Override
     public Dimension getPreferredSize() {
         int w = (int)((float)W * scale);
@@ -104,18 +92,18 @@ public class TreePanel extends JPanel {
         return size;
     }
 
-
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.darkGray);
-        g.fillRect(0, 0, canvasWidth, canvasHeight);
         int img_width =  (int)(30f * scale);
         int img_height = (int)(30f * scale);
-
+        
         Graphics2D g2 = (Graphics2D) g.create();
+        g2.setColor(Color.darkGray);
+        g2.fillRect(0, 0, canvasWidth, canvasHeight);
+        
         g2.setTransform(at);
-        for(Node node : this.listInUse) {
+        for(Node node : Data.visibleTree.toList()) {
             Point node_position = node.getPosition(canvasWidth, canvasHeight, this.treeDepth);  
             int node_X = (int)node_position.getX();
             int node_Y = (int)node_position.getY();
@@ -151,23 +139,5 @@ public class TreePanel extends JPanel {
         g2.dispose();
     }
 
-    public void setListInUse(TreeEnum treeEnum) {
-        switch (treeEnum) {
-            case INORDER:
-                this.listInUse = this.inOrderList;
-                break;
-        
-            case POSTORDER:
-                this.listInUse = this.postOrderList;
-                break;
-        
-            case PREORDER:
-                this.listInUse = this.preOrderList;
-                break;
-        
-            default:
-                break;
-        }
-        repaint();
-    }
+
 }

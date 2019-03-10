@@ -1,19 +1,13 @@
 package com.bauproject.pokemontree;
 
 import com.bauproject.pokemontree.graphics.*;
+import com.bauproject.pokemontree.structures.*;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+ 
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -33,7 +27,6 @@ public class App {
                 // JSON file path
                 String filePath = "./data.json";
                 JSONParser parser = new JSONParser();
-                Tree colorTree = new Tree();
 
                 try {
                     // Read JSON as array
@@ -49,20 +42,12 @@ public class App {
                         JSONArray avg_color_JSON = (JSONArray) imgObject.get("average_color");
                         Color avgColor = new Color(avg_color_JSON);
 
-                        // Dominant color
-                        // JSONArray dom_color_JSON = (JSONArray) imgObject.get("dominant_color");
-                        // Color dom_color = new Color(dom_color_JSON);
-
                         // Add the color to tree
-                        // colorTree.add(avgColor, ColorEnum.BRIGHTNESS);
-                        // colorTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS);
-                        colorTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
-
-                        // System.out.println(img_name);
-                        // System.out.println(avgColor);
-                        // System.out.println(dom_color);
+                        // Data.avlTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
+                        Data.bstTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
                     }
 
+                    // UI Config
                     try {
                         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                     } catch (ClassNotFoundException e) {
@@ -75,26 +60,8 @@ public class App {
                         e.printStackTrace(System.out);
                     }
 
-                    // Init and draw the tree
-                    JFrame frame = new JFrame("Color Tree");
-                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    final TreePanel colorTreePanel = new TreePanel(colorTree, frame);
-                    Button changeOrderButton = new Button("Change Order");
-                    changeOrderButton.setBounds(50,100,100,50);
-                    changeOrderButton.addActionListener(new ActionListener(){
-                    
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            colorTreePanel.setListInUse(TreeEnum.PREORDER);
-                        }
-                    });
-
-                    frame.setLayout(new BorderLayout());
-                    frame.add(changeOrderButton);
-                    frame.add(new JScrollPane(colorTreePanel));
-                    frame.pack();
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
+                    Frame frame = new Frame();
+                    frame.show(TreeEnum.BST);
 
                 } catch (FileNotFoundException e) {
                     System.out.printf("File can not be found: %s\n", filePath);

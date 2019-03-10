@@ -1,4 +1,4 @@
-package com.bauproject.pokemontree;
+package com.bauproject.pokemontree.structures;
 
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -15,34 +15,17 @@ public class Node {
     Node left;
     Node right;
     BufferedImage image = null;
-    Path tile_folder_path = Paths.get("src\\images\\");
+    Path tile_folder_path = Paths.get("images\\");
     long depth;
     long index;
- 
-    Node(Color color) {
-        this.color = color;
-        right = null;
-        left = null;
-    }
-    Node(Color color, String imgName) {
-        this.color = color;
-        this.imgName = imgName;
-        this.right = null;
-        this.left = null;
-        try {
-            String img_file_path = tile_folder_path.toAbsolutePath().toString() + "\\" + imgName;
-            File imageFile = new File(img_file_path);
-            this.image = ImageIO.read(imageFile);
-        } catch (IOException e) {
-            System.out.printf("Error reading file: %s", tile_folder_path.toAbsolutePath().toString() + imgName);
-            e.printStackTrace();
-        }
-    }
+    long height; // for AVL
+
     Node(Color color, String imgName, long index, long depth) {
         this.color = color;
         this.imgName = imgName;
         this.index = index;
         this.depth = depth;
+        this.height = 1;
         this.right = null;
         this.left = null;
         try {

@@ -1,4 +1,4 @@
-package com.bauproject.pokemontree;
+package com.bauproject.pokemontree.structures;
 
 public enum TreeEnum {
     INORDER,

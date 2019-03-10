@@ -1,4 +1,4 @@
-package com.bauproject.pokemontree;
+package com.bauproject.pokemontree.structures;
 
 import java.util.ArrayList;
 
@@ -60,30 +60,50 @@ public class Color {
     
     public ColorEnum compareHue(Color c) {
         if(c.getHSV()[0] > this.getHSV()[0]) {
-            return ColorEnum.HIGHER;
-        } else if (c.getHSV()[0] < this.getHSV()[0]) {
             return ColorEnum.LOWER;
+        } else if (c.getHSV()[0] < this.getHSV()[0]) {
+            return ColorEnum.HIGHER;
         } else {
             return ColorEnum.EQUAL;
         }                
     }
     public ColorEnum compareSaturation(Color c) {
         if(c.getHSV()[1] > this.getHSV()[1]) {
-            return ColorEnum.HIGHER;
-        } else if (c.getHSV()[1] < this.getHSV()[1]) {
             return ColorEnum.LOWER;
+        } else if (c.getHSV()[1] < this.getHSV()[1]) {
+            return ColorEnum.HIGHER;
         } else {
             return ColorEnum.EQUAL;
         }
     }
     public ColorEnum compareBrightness(Color c) {
         if(c.getHSV()[2] > this.getHSV()[2]) {
-            return ColorEnum.HIGHER;
-        } else if (c.getHSV()[2] < this.getHSV()[2]) {
             return ColorEnum.LOWER;
+        } else if (c.getHSV()[2] < this.getHSV()[2]) {
+            return ColorEnum.HIGHER;
         } else {
             return ColorEnum.EQUAL;
         }
+    }
+    public ColorEnum[] compareRGB(Color c) {
+        ColorEnum[] result = new ColorEnum[3];
+        
+        if(c.red > this.red)
+            result[0] = ColorEnum.LOWER;
+        else
+            result[0] = ColorEnum.HIGHER;
+        
+        if(c.green > this.green)
+            result[1] = ColorEnum.LOWER;
+        else
+            result[1] = ColorEnum.HIGHER;
+        
+        if(c.blue > this.blue)
+            result[2] = ColorEnum.LOWER;
+        else
+            result[2] = ColorEnum.HIGHER;
+
+        return result;
     }
 
     public String toString() {
