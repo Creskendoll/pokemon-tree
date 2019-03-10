@@ -28,8 +28,8 @@ public class TreePanel extends JPanel {
     private static final int W = 1360;
     private static final int H = 720;
 
-    int canvasWidth = 5000;
-    int canvasHeight = 2000;
+    int canvasWidth = 4000;
+    int canvasHeight = 720;
 
     public TreePanel(JFrame f) {
         this.treeDepth = Data.visibleTree.maxDepth();

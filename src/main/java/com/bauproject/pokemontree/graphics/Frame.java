@@ -25,19 +25,23 @@ public class Frame extends JFrame
         this.setIconImage(icon.getImage());
 
         this.setLayout(new BorderLayout());
-        Button changeOrderButton = new Button("Change Order");
-        changeOrderButton.setBounds(0,0,100,50);
+        Button changeOrderButton = new Button("Change Type");
+        changeOrderButton.setBounds(50,50,100,50);
 
         changeOrderButton.addActionListener(new ActionListener(){
             
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (Data.visibleTree instanceof AVLTree) {
                 Data.visibleTree = Data.bstTree;
+            }else {
+                Data.visibleTree = Data.avlTree;
+            }
                 Data.panel.repaint();
             }
         });
 
-        // this.add(changeOrderButton);
+        this.add(changeOrderButton);
     }
     
     public void show(TreeEnum treeEnum) {
