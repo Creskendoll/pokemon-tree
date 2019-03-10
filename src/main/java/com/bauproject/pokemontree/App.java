@@ -3,7 +3,10 @@ package com.bauproject.pokemontree;
 import com.bauproject.pokemontree.graphics.*;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -75,11 +78,19 @@ public class App {
                     // Init and draw the tree
                     JFrame frame = new JFrame("Color Tree");
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    JPanel colorTreePanel = new TreePanel(colorTree, frame);
-                    // System.out.println(colorTree);
-                    // frame.add(colorTreePanel);
+                    final TreePanel colorTreePanel = new TreePanel(colorTree, frame);
+                    Button changeOrderButton = new Button("Change Order");
+                    changeOrderButton.setBounds(50,100,100,50);
+                    changeOrderButton.addActionListener(new ActionListener(){
+                    
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            colorTreePanel.setListInUse(TreeEnum.PREORDER);
+                        }
+                    });
 
                     frame.setLayout(new BorderLayout());
+                    frame.add(changeOrderButton);
                     frame.add(new JScrollPane(colorTreePanel));
                     frame.pack();
                     frame.setLocationRelativeTo(null);

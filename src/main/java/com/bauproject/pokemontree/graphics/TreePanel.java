@@ -2,6 +2,7 @@ package com.bauproject.pokemontree.graphics;
 
 import com.bauproject.pokemontree.Node;
 import com.bauproject.pokemontree.Tree;
+import com.bauproject.pokemontree.TreeEnum;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -26,6 +27,7 @@ public class TreePanel extends JPanel {
     ArrayList<Node> inOrderList;
     ArrayList<Node> preOrderList;
     ArrayList<Node> postOrderList;
+    ArrayList<Node> listInUse;
     private float scale = 1;
     private Point mousePt;
     AffineTransform at = new AffineTransform();
@@ -36,13 +38,13 @@ public class TreePanel extends JPanel {
     int canvasWidth = 4000;
     int canvasHeight = 2000;
 
-
     public TreePanel(Tree colorTree, JFrame f) {
         this.colorTree = colorTree;
         this.treeDepth = colorTree.maxDepth();
         this.inOrderList = colorTree.traverseInOrder();
         this.preOrderList = colorTree.traversePreOrder();
         this.postOrderList = colorTree.traversePostOrder();
+        this.listInUse = this.inOrderList;
         final JFrame frame = f;
         this.addMouseWheelListener(new MouseAdapter() {
 
@@ -54,7 +56,7 @@ public class TreePanel extends JPanel {
                     scale = 1;
                 
                 Point mouse_location = MouseInfo.getPointerInfo().getLocation();
-                Point windowLocation = frame.getLocation();
+                // Point windowLocation = frame.getLocation();
                 // Point frameCenter = new Point((int)frame.getLocation().getX() + getWidth()/2, (int)frame.getLocation().getY() + getHeight()/2);
                 Point frameCenter = new Point((int)frame.getLocation().getX() + getWidth()/2, (int)frame.getLocation().getY() + getHeight()/2);
                 double dx = mouse_location.getX() - frameCenter.getX();
@@ -113,7 +115,7 @@ public class TreePanel extends JPanel {
 
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setTransform(at);
-        for(Node node : this.inOrderList) {
+        for(Node node : this.listInUse) {
             Point node_position = node.getPosition(canvasWidth, canvasHeight, this.treeDepth);  
             int node_X = (int)node_position.getX();
             int node_Y = (int)node_position.getY();
@@ -147,5 +149,25 @@ public class TreePanel extends JPanel {
             // g.drawString(debugInfo, tree_node_x, tree_node_y + node_height+20);
         }
         g2.dispose();
+    }
+
+    public void setListInUse(TreeEnum treeEnum) {
+        switch (treeEnum) {
+            case INORDER:
+                this.listInUse = this.inOrderList;
+                break;
+        
+            case POSTORDER:
+                this.listInUse = this.postOrderList;
+                break;
+        
+            case PREORDER:
+                this.listInUse = this.preOrderList;
+                break;
+        
+            default:
+                break;
+        }
+        repaint();
     }
 }
