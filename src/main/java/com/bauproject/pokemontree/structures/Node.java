@@ -18,14 +18,12 @@ public class Node {
     Path tile_folder_path = Paths.get("images\\");
     long depth;
     long index;
-    long height; // for AVL
 
     Node(Color color, String imgName, long index, long depth) {
         this.color = color;
         this.imgName = imgName;
         this.index = index;
         this.depth = depth;
-        this.height = 1;
         this.right = null;
         this.left = null;
         try {
@@ -46,8 +44,8 @@ public class Node {
     }
 
     public Point getPosition(int canvasWidth, int canvasHeight, int maxDepth) {
-        int x = (int)(this.getIndex() * canvasWidth / ( ((int)Math.pow(2, this.getDepth()) + 1) ));
-        int y = (int)(this.getDepth() * canvasHeight / maxDepth);
+        int x = (int)(this.getIndex() * canvasWidth / ( ((int)Math.pow(2, this.depth) + 1) ));
+        int y = (int)(this.depth * canvasHeight / maxDepth);
         return new Point(x, y);
     }
 
@@ -76,7 +74,7 @@ public class Node {
     }
     public Node getRight() {
         return this.right;
-    } 
+    }
 
     public String toString() {
         return "{ " + imgName + ", " + color.toString() + " }\n";

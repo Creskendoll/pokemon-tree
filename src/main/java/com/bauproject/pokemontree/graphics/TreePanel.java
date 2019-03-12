@@ -29,7 +29,7 @@ public class TreePanel extends JPanel {
     private static final int H = 720;
 
     int canvasWidth = 4000;
-    int canvasHeight = 720;
+    int canvasHeight = 2000;
 
     public TreePanel(JFrame f) {
         this.treeDepth = Data.visibleTree.maxDepth();
@@ -134,8 +134,11 @@ public class TreePanel extends JPanel {
             // g2.fillOval(node_X, node_Y, img_width, img_height);
             g2.drawImage(node.getImage(), node_X, node_Y, img_width, img_height, this);        
             
-            // String debugInfo = "Depth: " + String.valueOf(node.getDepth()) + "  Index: " + String.valueOf(node.getIndex()); 
-            // g.drawString(debugInfo, tree_node_x, tree_node_y + node_height+20);
+            g2.setColor(Color.white);
+            String indexInfo = "Index: " + String.valueOf(node.getIndex()); 
+            String depthInfo = "Depth: " + String.valueOf(node.getDepth());
+            g2.drawString(indexInfo, node_X, node_Y + img_height+20);
+            g2.drawString(depthInfo, node_X, node_Y + img_height+35);
         }
         g2.dispose();
     }
