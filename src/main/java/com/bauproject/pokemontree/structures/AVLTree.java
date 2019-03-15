@@ -51,11 +51,9 @@ public class AVLTree extends Tree {
 		if (node == null)
 			return node;
 		else {
-			node.index += val;
-			if (node.right != null)
-				node.right = recursiveChangeIndexBy(node.right, (long)Math.pow(2, node.depth));
-			if (node.left != null)
-				node.left = recursiveChangeIndexBy(node.left, (long)Math.pow(2, node.depth));
+			node.index = val;
+			node.left = recursiveChangeIndexBy(node.left, (node.index * 2) - 1);
+			node.right = recursiveChangeIndexBy(node.right, (node.index * 2));
 		}
 		return node;
 	}
@@ -66,20 +64,18 @@ public class AVLTree extends Tree {
 		Node x = y.left; 
 		Node T2 = x.right; 
 		 
-		// Update node index
-		y = recursiveChangeIndexBy(y, (long)Math.pow(2,y.depth));
-		y.index += 1;
-		
-		x.right = recursiveChangeIndexBy(y.right, y.depth);
-		x.left = recursiveChangeIndexBy(x.left, y.depth);
-		
-		if (T2 != null)
-			T2.index += 1;
-
 		// Perform rotation 
 		x.right = y;
-		y.left = T2; 
+		y.left = T2;
+		
+		// Update node index
+		x.index = y.index;
+		if(x.right != null)
+			x.right = recursiveChangeIndexBy(x.right, x.index * 2);
+		if(x.left != null)
+			x.left = recursiveChangeIndexBy(x.left, (x.index * 2) - 1);
 
+		// update depth
 		y.depth = max(height(y.left), height(y.right)) + 1; 
 		x.depth = max(height(x.left), height(x.right)) + 1; 
 
@@ -92,21 +88,18 @@ public class AVLTree extends Tree {
 	private Node leftRotate(Node x) { 
 		Node y = x.right;
 		Node T2 = y.left;
-
-		// Update node index
-		if(y != null)
-			y.index -= 1;
-			
-		y.right  = recursiveChangeIndexBy(y.right, -x.depth);
-		y.left  = recursiveChangeIndexBy(y.left, -x.depth);
 		
-		if (T2 != null)
-			T2.index -= 2;
-
 		// Perform rotation 
 		y.left = x;
 		x.right = T2;
-		
+
+		// Update node index
+		y.index = x.index;
+		if(y.right != null)
+			y.right = recursiveChangeIndexBy(y.right, y.index * 2);
+		if(y.left != null)
+			y.left = recursiveChangeIndexBy(y.left, (y.index * 2) - 1);
+
 		// Update heights 
 		x.depth = max(height(x.left), height(x.right)) + 1; 
 		y.depth = max(height(y.left), height(y.right)) + 1;

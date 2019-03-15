@@ -15,7 +15,7 @@ public class Node {
     Node left;
     Node right;
     BufferedImage image = null;
-    Path tile_folder_path = Paths.get("images\\");
+    Path tile_folder_path = Paths.get("src/images/");
     long depth;
     long index;
 
@@ -26,12 +26,12 @@ public class Node {
         this.depth = depth;
         this.right = null;
         this.left = null;
+        String img_file_path = tile_folder_path.resolve(imgName).toString();
         try {
-            String img_file_path = tile_folder_path.toAbsolutePath().toString() + "\\" + imgName;
             File imageFile = new File(img_file_path);
             this.image = ImageIO.read(imageFile);
         } catch (IOException e) {
-            System.out.printf("Error reading file: %s", tile_folder_path.toAbsolutePath() +"\\"+ imgName);
+            System.out.printf("Error reading file: %s", img_file_path);
             e.printStackTrace();
         }
     }

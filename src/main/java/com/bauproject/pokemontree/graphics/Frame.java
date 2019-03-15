@@ -7,8 +7,12 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import com.bauproject.pokemontree.structures.*;
 import com.bauproject.pokemontree.Data;
+import com.bauproject.pokemontree.Input;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -30,18 +34,23 @@ public class Frame extends JFrame
 
         changeOrderButton.addActionListener(new ActionListener(){
             
-        @Override
-        public void actionPerformed(ActionEvent e) {
+            @Override
+            public void actionPerformed(ActionEvent e) {
             if (Data.visibleTree instanceof AVLTree) {
                 Data.visibleTree = Data.bstTree;
             }else {
                 Data.visibleTree = Data.avlTree;
             }
-                Data.panel.repaint();
+            Data.panel.repaint();
             }
         });
-
+        
+        changeOrderButton.setFocusable(false);
+        
         this.add(changeOrderButton);
+        this.setFocusable(true);
+        this.requestFocusInWindow();
+        this.addKeyListener(new Input());
     }
     
     public void show(TreeEnum treeEnum) {

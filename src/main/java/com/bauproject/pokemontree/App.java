@@ -31,21 +31,22 @@ public class App {
                 try {
                     // Read JSON as array
                     JSONArray arr = (JSONArray) parser.parse(new FileReader(filePath));
+                    Data.treeArray = arr;
                     // For each image in JSON array
-                    for (Object obj : arr) {
-                        // Cast obj to JSON
-                        JSONObject imgObject = (JSONObject) obj;
-                        // Get image name
-                        String img_name = (String) imgObject.get("name");
+                    // for (Object obj : arr) {
+                    //     // Cast obj to JSON
+                    //     JSONObject imgObject = (JSONObject) obj;
+                    //     // Get image name
+                    //     String img_name = (String) imgObject.get("name");
 
-                        // Average color
-                        JSONArray avg_color_JSON = (JSONArray) imgObject.get("average_color");
-                        Color avgColor = new Color(avg_color_JSON);
+                    //     // Average color
+                    //     JSONArray avg_color_JSON = (JSONArray) imgObject.get("average_color");
+                    //     Color avgColor = new Color(avg_color_JSON);
 
-                        // Add the color to tree
-                        Data.avlTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
-                        Data.bstTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
-                    }
+                    //     // Add the color to tree
+                    //     Data.avlTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
+                    //     Data.bstTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
+                    // }
 
                     // UI Config
                     try {

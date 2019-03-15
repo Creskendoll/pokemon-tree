@@ -2,6 +2,7 @@ package com.bauproject.pokemontree.graphics;
 
 import com.bauproject.pokemontree.structures.*;
 import com.bauproject.pokemontree.Data;
+import com.bauproject.pokemontree.Input;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,6 +10,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
@@ -32,7 +35,6 @@ public class TreePanel extends JPanel {
     int canvasHeight = 2000;
 
     public TreePanel(JFrame f) {
-        this.treeDepth = Data.visibleTree.maxDepth();
         final JFrame frame = f;
 
         this.addMouseWheelListener(new MouseAdapter() {
@@ -83,6 +85,10 @@ public class TreePanel extends JPanel {
                 repaint();
             }
         });
+
+        // this.setFocusable(true);
+        // this.requestFocusInWindow();
+        // this.addKeyListener(new Input());
     }
 
     @Override
@@ -104,41 +110,46 @@ public class TreePanel extends JPanel {
         g2.fillRect(0, 0, canvasWidth, canvasHeight);
         
         g2.setTransform(at);
-        for(Node node : Data.visibleTree.toList()) {
-            Point node_position = node.getPosition(canvasWidth, canvasHeight, this.treeDepth);  
-            int node_X = (int)node_position.getX();
-            int node_Y = (int)node_position.getY();
-            // Draw branches
-            if (node.getLeft() != null) {
-                Point left_position = node.getLeft().getPosition(canvasWidth, canvasHeight, this.treeDepth);
-                int left_X = (int)left_position.getX();
-                int left_Y = (int)left_position.getY();
-                g2.setColor(Color.cyan);
-                g2.drawLine(node_X+img_width/2, node_Y+img_height/2, left_X+img_width/2, left_Y+img_height/2);
+        // System.out.println(Data.visibleTree);
+        int treeDepth = Data.visibleTree.maxDepth();
+        if(treeDepth > 0) {
+            for(Node node : Data.visibleTree.toList()) {
+                Point node_position = node.getPosition(canvasWidth, canvasHeight, treeDepth);  
+                int node_X = (int)node_position.getX();
+                int node_Y = (int)node_position.getY();
+
+                // Draw branches
+                if (node.getLeft() != null) {
+                    Point left_position = node.getLeft().getPosition(canvasWidth, canvasHeight, treeDepth);
+                    int left_X = (int)left_position.getX();
+                    int left_Y = (int)left_position.getY();
+                    g2.setColor(Color.cyan);
+                    g2.drawLine(node_X+img_width/2, node_Y+img_height/2, left_X+img_width/2, left_Y+img_height/2);
+                }
+                if (node.getRight() != null) {
+                    Point right_position = node.getRight().getPosition(canvasWidth, canvasHeight, treeDepth);
+                    int right_X = (int)right_position.getX();
+                    int right_Y = (int)right_position.getY();
+                    g2.setColor(Color.cyan);
+                    g2.drawLine(node_X+img_width/2, node_Y+img_height/2, right_X+img_width/2, right_Y+img_height/2);
+                }
+                
+                // Positions for consecutive stacking
+                // int img_X = ((node_index * img_width) % (int) Math.ceil((double)(getWidth() - img_width)));
+                // int img_Y = (((node_index * img_height) / (int) Math.ceil((double)(getWidth() - img_width))) * img_height);
+                
+                // Draw nodes
+                g2.setColor(node.getColor().toJavaColor());
+                // g.fillOval(img_X, img_Y, node_width, node_height);
+                // g2.fillOval(node_X, node_Y, img_width, img_height);
+                g2.drawImage(node.getImage(), node_X, node_Y, img_width, img_height, this);        
+                
+                g2.setColor(Color.white);
+                String indexInfo = "Index: " + String.valueOf(node.getIndex()); 
+                String depthInfo = "Depth: " + String.valueOf(node.getDepth());
+                g2.drawString(indexInfo, node_X, node_Y + img_height+20);
+                g2.drawString(depthInfo, node_X, node_Y + img_height+35);
             }
-            if (node.getRight() != null) {
-                Point right_position = node.getRight().getPosition(canvasWidth, canvasHeight, this.treeDepth);
-                int right_X = (int)right_position.getX();
-                int right_Y = (int)right_position.getY();
-                g2.setColor(Color.cyan);
-                g2.drawLine(node_X+img_width/2, node_Y+img_height/2, right_X+img_width/2, right_Y+img_height/2);
-            }
-            
-            // Positions for consecutive stacking
-            // int img_X = ((node_index * img_width) % (int) Math.ceil((double)(getWidth() - img_width)));
-            // int img_Y = (((node_index * img_height) / (int) Math.ceil((double)(getWidth() - img_width))) * img_height);
-            
-            // Draw nodes
-            g2.setColor(node.getColor().toJavaColor());
-            // g.fillOval(img_X, img_Y, node_width, node_height);
-            // g2.fillOval(node_X, node_Y, img_width, img_height);
-            g2.drawImage(node.getImage(), node_X, node_Y, img_width, img_height, this);        
-            
-            g2.setColor(Color.white);
-            String indexInfo = "Index: " + String.valueOf(node.getIndex()); 
-            String depthInfo = "Depth: " + String.valueOf(node.getDepth());
-            g2.drawString(indexInfo, node_X, node_Y + img_height+20);
-            g2.drawString(depthInfo, node_X, node_Y + img_height+35);
         }
         g2.dispose();
     }
