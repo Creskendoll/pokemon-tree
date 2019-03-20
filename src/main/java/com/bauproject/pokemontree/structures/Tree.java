@@ -154,6 +154,10 @@ public class Tree implements ITree {
         return "";
     }
 
+    public TreeEnum getType() {
+        return TreeEnum.BST;
+    }
+
     @Override
     public ArrayList<Node> toList() {
         return this.traverseInOrder(this.root);

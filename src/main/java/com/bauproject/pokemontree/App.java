@@ -7,7 +7,7 @@ import java.awt.EventQueue;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
- 
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -27,26 +27,31 @@ public class App {
                 // JSON file path
                 String filePath = "./data.json";
                 JSONParser parser = new JSONParser();
+                Data.leafStep.put(TreeEnum.BST, 0);
+                Data.leafStep.put(TreeEnum.AVL, 0);
+
+                Data.trees.put(TreeEnum.BST, new Tree());
+                Data.trees.put(TreeEnum.AVL, new AVLTree());
 
                 try {
                     // Read JSON as array
                     JSONArray arr = (JSONArray) parser.parse(new FileReader(filePath));
                     Data.treeArray = arr;
                     // For each image in JSON array
-                    // for (Object obj : arr) {
-                    //     // Cast obj to JSON
-                    //     JSONObject imgObject = (JSONObject) obj;
-                    //     // Get image name
-                    //     String img_name = (String) imgObject.get("name");
+                    for (Object obj : arr) {
+                        // Cast obj to JSON
+                        JSONObject imgObject = (JSONObject) obj;
+                        // Get image name
+                        String img_name = (String) imgObject.get("name");
 
-                    //     // Average color
-                    //     JSONArray avg_color_JSON = (JSONArray) imgObject.get("average_color");
-                    //     Color avgColor = new Color(avg_color_JSON);
+                        // Average color
+                        JSONArray avg_color_JSON = (JSONArray) imgObject.get("average_color");
+                        Color avgColor = new Color(avg_color_JSON);
 
-                    //     // Add the color to tree
-                    //     Data.avlTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
-                    //     Data.bstTree.add(avgColor, img_name, ColorEnum.BRIGHTNESS, 1, 0);
-                    // }
+                        // Add the color to tree
+                        Data.trees.get(TreeEnum.AVL).add(avgColor, img_name, Data.sortBy, 1, 0);
+                        Data.trees.get(TreeEnum.BST).add(avgColor, img_name, Data.sortBy, 1, 0);
+                    }
 
                     // UI Config
                     try {
@@ -62,7 +67,7 @@ public class App {
                     }
 
                     Frame frame = new Frame();
-                    frame.show(TreeEnum.AVL);
+                    frame.show(TreeEnum.BST);
 
                 } catch (FileNotFoundException e) {
                     System.out.printf("File can not be found: %s\n", filePath);

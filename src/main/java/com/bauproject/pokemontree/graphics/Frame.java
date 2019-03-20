@@ -7,10 +7,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import com.bauproject.pokemontree.structures.*;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import com.bauproject.pokemontree.Data;
 import com.bauproject.pokemontree.Input;
 
@@ -29,44 +30,76 @@ public class Frame extends JFrame
         this.setIconImage(icon.getImage());
 
         this.setLayout(new BorderLayout());
-        Button changeOrderButton = new Button("Change Type");
-        changeOrderButton.setBounds(50,50,100,50);
+        Button changeTypeButton = new Button("Change Type");
+        Button showAllButton = new Button("Show All/Partial");
+        changeTypeButton.setBounds(50,50,100,50);
+        showAllButton.setBounds(200,50,100,50);
 
-        changeOrderButton.addActionListener(new ActionListener(){
+        changeTypeButton.addActionListener(new ActionListener(){
             
             @Override
             public void actionPerformed(ActionEvent e) {
-            if (Data.visibleTree instanceof AVLTree) {
-                Data.visibleTree = Data.bstTree;
+            if (Data.visibleTree.compareTo(TreeEnum.AVL) == 0) {
+                Data.visibleTree = TreeEnum.BST;
+                if(Data.showPartialTree) {
+                    Data.partialTree = new Tree();
+                    for (int i = 0; i < Data.leafStep.get(TreeEnum.BST); i++) {
+                        // Cast obj to JSON
+                        JSONObject imgObject = (JSONObject) Data.treeArray.get(i);
+                        // Get image name
+                        String img_name = (String) imgObject.get("name");
+
+                        // Average color
+                        JSONArray avg_color_JSON = (JSONArray) imgObject.get("average_color");
+                        Color avgColor = new Color(avg_color_JSON);
+
+                        // Add the color to tree
+                        Data.partialTree.add(avgColor, img_name, Data.sortBy, 1, 0);
+                    }
+                }
             }else {
-                Data.visibleTree = Data.avlTree;
+                Data.visibleTree = TreeEnum.AVL;
+                if(Data.showPartialTree) {
+                    Data.partialTree = new AVLTree();
+                    for (int i = 0; i < Data.leafStep.get(TreeEnum.AVL); i++) {
+                        // Cast obj to JSON
+                        JSONObject imgObject = (JSONObject) Data.treeArray.get(i);
+                        // Get image name
+                        String img_name = (String) imgObject.get("name");
+
+                        // Average color
+                        JSONArray avg_color_JSON = (JSONArray) imgObject.get("average_color");
+                        Color avgColor = new Color(avg_color_JSON);
+
+                        // Add the color to tree
+                        Data.partialTree.add(avgColor, img_name, Data.sortBy, 1, 0);
+                    }
+                }
             }
             Data.panel.repaint();
             }
         });
+        showAllButton.addActionListener(new ActionListener(){
+            
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Data.showPartialTree = !Data.showPartialTree;
+                Data.panel.repaint();
+            }
+        });
         
-        changeOrderButton.setFocusable(false);
+        changeTypeButton.setFocusable(false);
+        showAllButton.setFocusable(false);
         
-        this.add(changeOrderButton);
+        this.add(changeTypeButton);
+        this.add(showAllButton);
         this.setFocusable(true);
         this.requestFocusInWindow();
         this.addKeyListener(new Input());
     }
     
     public void show(TreeEnum treeEnum) {
-        switch (treeEnum) {
-            case BST:
-                Data.visibleTree = Data.bstTree;
-                break;
-                
-            case AVL:
-                Data.visibleTree = Data.avlTree;
-                break;
-                
-            default:
-                Data.visibleTree = new Tree();
-                break;
-        }
+        Data.visibleTree = treeEnum;
         Data.panel = new TreePanel(this);
         
         this.add(new JScrollPane(Data.panel));

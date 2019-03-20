@@ -2,21 +2,18 @@ package com.bauproject.pokemontree.graphics;
 
 import com.bauproject.pokemontree.structures.*;
 import com.bauproject.pokemontree.Data;
-import com.bauproject.pokemontree.Input;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -85,10 +82,6 @@ public class TreePanel extends JPanel {
                 repaint();
             }
         });
-
-        // this.setFocusable(true);
-        // this.requestFocusInWindow();
-        // this.addKeyListener(new Input());
     }
 
     @Override
@@ -110,10 +103,25 @@ public class TreePanel extends JPanel {
         g2.fillRect(0, 0, canvasWidth, canvasHeight);
         
         g2.setTransform(at);
-        // System.out.println(Data.visibleTree);
-        int treeDepth = Data.visibleTree.maxDepth();
+
+        // Name of the tree
+        // g2.setColor(Color.white);
+        // g2.drawString(Data.visibleTree.name(), W/2, 20);
+        Tree t = Data.trees.get(Data.visibleTree);
+        int treeDepth = 0;
+
+        List<Node> iterList = null;
+        if(Data.showPartialTree) { 
+            iterList = Data.partialTree.toList();
+            treeDepth = Data.partialTree.maxDepth();
+        }
+        else { 
+            iterList = t.toList();
+            treeDepth =  t.maxDepth();
+        }
+
         if(treeDepth > 0) {
-            for(Node node : Data.visibleTree.toList()) {
+            for(Node node : iterList) {
                 Point node_position = node.getPosition(canvasWidth, canvasHeight, treeDepth);  
                 int node_X = (int)node_position.getX();
                 int node_Y = (int)node_position.getY();

@@ -4,13 +4,18 @@ import com.bauproject.pokemontree.structures.*;
 
 import org.json.simple.JSONArray;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.bauproject.pokemontree.graphics.*;
 
 public class Data {
-    public static Tree bstTree = new Tree();
-    public static Tree avlTree = new AVLTree();
-    public static Tree visibleTree = null;
+    public static TreeEnum visibleTree = TreeEnum.BST;
+    public static Map<TreeEnum, Tree> trees = new HashMap<TreeEnum, Tree>();
+    public static Map<TreeEnum, Integer> leafStep = new HashMap<TreeEnum, Integer>();
+    public static boolean showPartialTree = false;
+    public static Tree partialTree = new Tree();
     public static TreePanel panel = null;
-    public static int leafStep = 0;
+    public static ColorEnum sortBy = ColorEnum.BRIGHTNESS;
     public static JSONArray treeArray = new JSONArray();
 }

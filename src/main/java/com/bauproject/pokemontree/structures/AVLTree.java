@@ -184,6 +184,11 @@ public class AVLTree extends Tree {
 		return node; 
     }
 
+	@Override
+	public TreeEnum getType(){
+		return TreeEnum.AVL;
+	}
+
     @Override
     public void add(Color color, String imgName, ColorEnum type, int index, int depth) {
         this.root = addRecursive(this.root, color, imgName, type, index, depth);
