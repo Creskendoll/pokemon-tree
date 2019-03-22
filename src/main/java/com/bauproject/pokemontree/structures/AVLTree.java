@@ -2,6 +2,8 @@ package com.bauproject.pokemontree.structures;
 
 import java.util.ArrayList;
 
+import com.bauproject.pokemontree.Data;
+
 // https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
 // Java program for insertion in AVL Tree 
 public class AVLTree extends Tree { 
@@ -116,7 +118,7 @@ public class AVLTree extends Tree {
 		return height(N.left) - height(N.right); 
 	} 
     
-	private Node addRecursive(Node node, Color color, String imgName, ColorEnum type, long index, long depth) { 
+	private Node addRecursive(Node node, Color color, String imgName, long index, long depth) { 
 
 		/* 1. Perform the normal BST insertion */
         if (node == null) {
@@ -127,7 +129,7 @@ public class AVLTree extends Tree {
         }
 
         ColorEnum result = null;
-        switch (type) {
+        switch (Data.sortBy) {
             case BRIGHTNESS:
                 result = color.compareBrightness(node.color);
                 break;
@@ -136,16 +138,25 @@ public class AVLTree extends Tree {
                 break;
             case HUE:
                 result = color.compareHue(node.color);
-                break;
+				break;
+			case RED:
+				result = color.compareRGB(node.color)[0];
+				break;
+			case GREEN:
+				result = color.compareRGB(node.color)[1];
+				break;
+			case BLUE:
+				result = color.compareRGB(node.color)[2];
+				break;
             default:
                 result = ColorEnum.EQUAL;
                 break;
         }
 
 		if (result == ColorEnum.LOWER) 
-            node.left = addRecursive(node.left, color, imgName, type, (node.getIndex() * 2) - 1, depth);
+            node.left = addRecursive(node.left, color, imgName, (node.getIndex() * 2) - 1, depth);
 		else if (result == ColorEnum.HIGHER) 
-            node.right = addRecursive(node.right, color, imgName, type, node.getIndex() * 2, depth);
+            node.right = addRecursive(node.right, color, imgName, node.getIndex() * 2, depth);
 		else // Duplicate keys not allowed 
 			return node;
 
@@ -158,7 +169,6 @@ public class AVLTree extends Tree {
 			unbalanced */
 		long balance = getBalance(node); 
 
-        // TODO: depend on type
 		// If this node becomes unbalanced, then there 
 		// are 4 cases Left Left Case 
 		if (balance > 1 && color.compareBrightness(node.left.color) == ColorEnum.LOWER) 
@@ -190,8 +200,12 @@ public class AVLTree extends Tree {
 	}
 
     @Override
-    public void add(Color color, String imgName, ColorEnum type, int index, int depth) {
-        this.root = addRecursive(this.root, color, imgName, type, index, depth);
+    public void add(Color color, String imgName, int index, int depth) {
+        this.root = addRecursive(this.root, color, imgName, index, depth);
+	}
+    @Override
+    public void add(Node node) {
+        this.root = addRecursive(this.root, node.color, node.imgName, node.index, node.depth);
 	}
 	@Override
     public ArrayList<Node> toList() {

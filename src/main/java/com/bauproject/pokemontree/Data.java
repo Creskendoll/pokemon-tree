@@ -4,6 +4,7 @@ import com.bauproject.pokemontree.structures.*;
 
 import org.json.simple.JSONArray;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,4 +19,5 @@ public class Data {
     public static TreePanel panel = null;
     public static ColorEnum sortBy = ColorEnum.BRIGHTNESS;
     public static JSONArray treeArray = new JSONArray();
+    public static ArrayList<Node> nodeList = new ArrayList<Node>();
 }

@@ -48,9 +48,12 @@ public class App {
                         JSONArray avg_color_JSON = (JSONArray) imgObject.get("average_color");
                         Color avgColor = new Color(avg_color_JSON);
 
+                        Node node = new Node(avgColor, img_name, 1, 0);
+                        Data.nodeList.add(node);
+
                         // Add the color to tree
-                        Data.trees.get(TreeEnum.AVL).add(avgColor, img_name, Data.sortBy, 1, 0);
-                        Data.trees.get(TreeEnum.BST).add(avgColor, img_name, Data.sortBy, 1, 0);
+                        Data.trees.get(TreeEnum.AVL).add(node);
+                        Data.trees.get(TreeEnum.BST).add(node);
                     }
 
                     // UI Config

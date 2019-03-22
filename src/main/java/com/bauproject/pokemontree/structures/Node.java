@@ -19,7 +19,7 @@ public class Node {
     long depth;
     long index;
 
-    Node(Color color, String imgName, long index, long depth) {
+    public Node(Color color, String imgName, long index, long depth) {
         this.color = color;
         this.imgName = imgName;
         this.index = index;

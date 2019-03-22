@@ -2,6 +2,8 @@ package com.bauproject.pokemontree.structures;
 
 import java.util.ArrayList;
 
+import com.bauproject.pokemontree.Data;
+
 public class Tree implements ITree {
     Node root;
 
@@ -35,7 +37,7 @@ public class Tree implements ITree {
     // ======================== Add methods ========================
 
     // Add with image name
-    private Node addRecursive(Node current, Color color, String imgName, ColorEnum type, long index, long depth) {
+    private Node addRecursive(Node current, Color color, String imgName, long index, long depth) {
         if (current == null) {
             // Read image files
             return new Node(color, imgName, index, depth);
@@ -44,7 +46,7 @@ public class Tree implements ITree {
         }
         
         ColorEnum result = null;
-        switch (type) {
+        switch (Data.sortBy) {
             case BRIGHTNESS:
                 result = color.compareBrightness(current.color);
                 break;
@@ -54,18 +56,27 @@ public class Tree implements ITree {
             case HUE:
                 result = color.compareHue(current.color);
                 break;
+            case RED:
+                result = color.compareRGB(current.color)[0];
+                break;
+            case GREEN:
+                result = color.compareRGB(current.color)[1];
+                break;
+            case BLUE:
+                result = color.compareRGB(current.color)[2];
+                break;
             default:
                 result = ColorEnum.EQUAL;
                 break;
         }
 
         if (result == ColorEnum.LOWER) {
-            current.left = addRecursive(current.left, color, imgName, type, (current.getIndex() * 2) - 1, depth + 1);
+            current.left = addRecursive(current.left, color, imgName, (current.getIndex() * 2) - 1, depth + 1);
         } else if (result == ColorEnum.HIGHER) {
-            current.right = addRecursive(current.right, color, imgName, type, current.getIndex() * 2, depth + 1);
+            current.right = addRecursive(current.right, color, imgName, current.getIndex() * 2, depth + 1);
         } else {
             // value already exists
-            current.left = addRecursive(current.left, color, imgName, type, (current.getIndex() * 2) - 1, depth + 1);
+            current.left = addRecursive(current.left, color, imgName, (current.getIndex() * 2) - 1, depth + 1);
             // Results in less nodes
             // return current;
         }
@@ -74,8 +85,12 @@ public class Tree implements ITree {
     }
 
     @Override
-    public void add(Color color, String imgName, ColorEnum type, int index, int depth) {
-        this.root = addRecursive(this.root, color, imgName, type, index, depth);
+    public void add(Color color, String imgName, int index, int depth) {
+        this.root = addRecursive(this.root, color, imgName, index, depth);
+    }
+    @Override
+    public void add(Node node) {
+        this.root = addRecursive(this.root, node.color, node.imgName, node.index, node.depth);
     }
 
     // ======================== Traverse methods ========================

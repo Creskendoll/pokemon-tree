@@ -27,7 +27,7 @@ public class Input implements KeyListener {
             Color avgColor = new Color(avg_color_JSON);
             
             // Add the color to tree
-            Data.partialTree.add(avgColor, img_name, Data.sortBy, 1, 0);
+            Data.partialTree.add(avgColor, img_name, 1, 0);
          
             Data.leafStep.put(Data.visibleTree, currentStep+1);
             Data.panel.repaint();

@@ -9,9 +9,6 @@ import javax.swing.JScrollPane;
 
 import com.bauproject.pokemontree.structures.*;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
 import com.bauproject.pokemontree.Data;
 import com.bauproject.pokemontree.Input;
 
@@ -39,42 +36,12 @@ public class Frame extends JFrame
             
             @Override
             public void actionPerformed(ActionEvent e) {
-            if (Data.visibleTree.compareTo(TreeEnum.AVL) == 0) {
+            if (Data.visibleTree == TreeEnum.AVL) {
                 Data.visibleTree = TreeEnum.BST;
-                if(Data.showPartialTree) {
-                    Data.partialTree = new Tree();
-                    for (int i = 0; i < Data.leafStep.get(TreeEnum.BST); i++) {
-                        // Cast obj to JSON
-                        JSONObject imgObject = (JSONObject) Data.treeArray.get(i);
-                        // Get image name
-                        String img_name = (String) imgObject.get("name");
-
-                        // Average color
-                        JSONArray avg_color_JSON = (JSONArray) imgObject.get("average_color");
-                        Color avgColor = new Color(avg_color_JSON);
-
-                        // Add the color to tree
-                        Data.partialTree.add(avgColor, img_name, Data.sortBy, 1, 0);
-                    }
-                }
+                buildTree();
             }else {
                 Data.visibleTree = TreeEnum.AVL;
-                if(Data.showPartialTree) {
-                    Data.partialTree = new AVLTree();
-                    for (int i = 0; i < Data.leafStep.get(TreeEnum.AVL); i++) {
-                        // Cast obj to JSON
-                        JSONObject imgObject = (JSONObject) Data.treeArray.get(i);
-                        // Get image name
-                        String img_name = (String) imgObject.get("name");
-
-                        // Average color
-                        JSONArray avg_color_JSON = (JSONArray) imgObject.get("average_color");
-                        Color avgColor = new Color(avg_color_JSON);
-
-                        // Add the color to tree
-                        Data.partialTree.add(avgColor, img_name, Data.sortBy, 1, 0);
-                    }
-                }
+                buildTree();
             }
             Data.panel.repaint();
             }
@@ -96,6 +63,20 @@ public class Frame extends JFrame
         this.setFocusable(true);
         this.requestFocusInWindow();
         this.addKeyListener(new Input());
+    }
+
+    private void buildTree() {
+        if(Data.showPartialTree) {
+            if (Data.visibleTree == TreeEnum.BST){
+                Data.partialTree = new Tree();
+            } else if (Data.visibleTree == TreeEnum.AVL) {
+                Data.partialTree = new AVLTree();
+            }
+            for (int i = 0; i < Data.leafStep.get(Data.visibleTree); i++) {
+                Node node = Data.nodeList.get(i);
+                Data.partialTree.add(node);
+            }
+        }
     }
     
     public void show(TreeEnum treeEnum) {
