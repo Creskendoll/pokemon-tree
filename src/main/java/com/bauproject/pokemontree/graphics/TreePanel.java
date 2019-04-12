@@ -54,7 +54,8 @@ public class TreePanel extends JPanel {
                 // System.out.printf("Window X:%.2f\nWindow Y:%.2f\n", windowLocation.getX(), windowLocation.getY());
                 AffineTransform _at = new AffineTransform();
                 _at.setToScale(scale, scale);
-                _at.translate(-dx*1/scale, -dy*1/scale);
+                // _at.translate(-dx*1/scale, -dy*1/scale);
+                _at.translate(-dx, -dy);
                 // System.out.printf("Delta X:%.2f\nDelta Y:%.2f\n", dx, dy);
                 at = _at;
                 revalidate();

@@ -38,13 +38,12 @@ public class AVLTree extends Tree {
 	}
 
 	private Node recursiveChangeDepthBy(Node node, long val) {
-		if (node != null) {
-			node.depth += val;
+		if (node == null)
 			return node;
-		}
 		else {
-			node.right = recursiveChangeDepthBy(node.right, (long)Math.pow(2, node.depth));
-			node.left = recursiveChangeDepthBy(node.left, val);
+			node.depth = val;
+			node.right = recursiveChangeDepthBy(node.right, val+1);
+			node.left = recursiveChangeDepthBy(node.left, val+1);
 		}
 		return node;
 	}
@@ -70,16 +69,11 @@ public class AVLTree extends Tree {
 		x.right = y;
 		y.left = T2;
 		
-		// Update node index
-		x.index = y.index;
-		if(x.right != null)
-			x.right = recursiveChangeIndexBy(x.right, x.index * 2);
-		if(x.left != null)
-			x.left = recursiveChangeIndexBy(x.left, (x.index * 2) - 1);
-
 		// update depth
 		y.depth = max(height(y.left), height(y.right)) + 1; 
 		x.depth = max(height(x.left), height(x.right)) + 1; 
+		
+		x = recursiveChangeIndexBy(x, x.index);
 
 		// Return new root 
 		return x; 
@@ -95,19 +89,14 @@ public class AVLTree extends Tree {
 		y.left = x;
 		x.right = T2;
 
-		// Update node index
-		y.index = x.index;
-		if(y.right != null)
-			y.right = recursiveChangeIndexBy(y.right, y.index * 2);
-		if(y.left != null)
-			y.left = recursiveChangeIndexBy(y.left, (y.index * 2) - 1);
-
 		// Update heights 
 		x.depth = max(height(x.left), height(x.right)) + 1; 
 		y.depth = max(height(y.left), height(y.right)) + 1;
-		
+
+		y = recursiveChangeIndexBy(y, y.index);
+
 		// Return new root 
-		return y; 
+		return y;
 	} 
 
 	// Get Balance factor of node N 
@@ -153,12 +142,19 @@ public class AVLTree extends Tree {
                 break;
         }
 
-		if (result == ColorEnum.LOWER) 
+		if (result == ColorEnum.LOWER) {
             node.left = addRecursive(node.left, color, imgName, (node.getIndex() * 2) - 1, depth);
-		else if (result == ColorEnum.HIGHER) 
-            node.right = addRecursive(node.right, color, imgName, node.getIndex() * 2, depth);
-		else // Duplicate keys not allowed 
+			// node.left = recursiveChangeIndexBy(node.left, node.left.index);
+		}
+		else if (result == ColorEnum.HIGHER) {
+			node.right = addRecursive(node.right, color, imgName, node.getIndex() * 2, depth);
+			// node.right = recursiveChangeIndexBy(node.right, node.right.index);
+		}
+		else {
+			// Duplicate keys not allowed
+			// return recursiveChangeIndexBy(node, node.index);
 			return node;
+		} 
 
 		/* 2. Update height of this ancestor node */
 		node.depth = 1 + max(height(node.left), 
@@ -171,26 +167,37 @@ public class AVLTree extends Tree {
 
 		// If this node becomes unbalanced, then there 
 		// are 4 cases Left Left Case 
-		if (balance > 1 && color.compareBrightness(node.left.color) == ColorEnum.LOWER) 
-			return rightRotate(node);
-
+		if (balance > 1 && color.compareBrightness(node.left.color) == ColorEnum.LOWER) {
+			Node n = rightRotate(node);
+			// return recursiveChangeIndexBy(n, n.index);
+			return n;
+		} 
+			
 		// Right Right Case 
-		if (balance < -1 && color.compareBrightness(node.right.color) == ColorEnum.HIGHER) 
-			return leftRotate(node);
+		if (balance < -1 && color.compareBrightness(node.right.color) == ColorEnum.HIGHER) {
+			Node n = leftRotate(node);
+			// return recursiveChangeIndexBy(n, n.index);
+			return n;
+		} 
 
 		// Left Right Case 
 		if (balance > 1 && color.compareBrightness(node.left.color) == ColorEnum.HIGHER) { 
 			node.left = leftRotate(node.left);
-			return rightRotate(node);
+			Node n = rightRotate(node); 
+			// return recursiveChangeIndexBy(n, n.index);
+			return n;
 		} 
 
 		// Right Left Case 
 		if (balance < -1 && color.compareBrightness(node.right.color) == ColorEnum.LOWER) { 
 			node.right = rightRotate(node.right); 
-			return leftRotate(node); 
-		} 
+			Node n = leftRotate(node); 
+			// return recursiveChangeIndexBy(n, n.index); 
+			return n;
+		}
 
 		/* return the (unchanged) node pointer */
+		// return recursiveChangeIndexBy(node, node.index);
 		return node; 
     }
 

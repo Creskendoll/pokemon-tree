@@ -18,7 +18,7 @@ public class Color {
     public Color(float R, float G, float B, float A) {
         this.red = R;
         this.green = G;
-        this.blue = B;    
+        this.blue = B;
         this.alpha = A;
     }
     public Color(JSONArray colors) {

@@ -15,7 +15,7 @@ public class Node {
     Node left;
     Node right;
     BufferedImage image = null;
-    Path tile_folder_path = Paths.get("src/images/");
+    Path tile_folder_path = Paths.get("./images/");
     long depth;
     long index;
 
