@@ -30,38 +30,36 @@ public class Frame extends JFrame
         this.setIconImage(icon.getImage());
 
         this.setLayout(new BorderLayout());
-        Button changeTypeButton = new Button("Change Type");
         Button showAllButton = new Button("Show All/Partial");
+        // Tree types
         Choice treeTypesChoice = new Choice();
         treeTypesChoice.add(TreeEnum.BST.toString());
         treeTypesChoice.add(TreeEnum.AVL.toString());
+        // Sort by options
+        Choice sortByChoice = new Choice();
+        sortByChoice.add(ColorEnum.BRIGHTNESS.toString());
+        sortByChoice.add(ColorEnum.HUE.toString());
+        sortByChoice.add(ColorEnum.SATURATION.toString());
+        sortByChoice.add(ColorEnum.RED.toString());
+        sortByChoice.add(ColorEnum.GREEN.toString());
+        sortByChoice.add(ColorEnum.BLUE.toString());
 
-        changeTypeButton.setBounds(50,50,100,50);
-        showAllButton.setBounds(200,50,100,50);
         treeTypesChoice.setBounds(50,50,100,50);
+        showAllButton.setBounds(350,50,100,50);
+        sortByChoice.setBounds(200,50,100,50);
 
-        changeTypeButton.addActionListener(new ActionListener(){
-            
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (Data.visibleTree == TreeEnum.AVL) {
-                    Data.visibleTree = TreeEnum.BST;
-                }else {
-                    Data.visibleTree = TreeEnum.AVL;
-                }
-                buildTree();
-                Data.panel.repaint();
-            }
-        });
+        // Switch between partian and full view
         showAllButton.addActionListener(new ActionListener(){
             
             @Override
             public void actionPerformed(ActionEvent e) {
                 Data.showPartialTree = !Data.showPartialTree;
+                buildTree();
                 Data.panel.repaint();
             }
         });
 
+        // Select tree type 
         treeTypesChoice.addItemListener(new ItemListener(){
         
             @Override
@@ -75,12 +73,39 @@ public class Frame extends JFrame
                 Data.panel.repaint();
             }
         });
+
+        // Sort the nodes by
+        sortByChoice.addItemListener(new ItemListener() {
+            
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                String selection = e.getItem().toString();
+
+                if(ColorEnum.BRIGHTNESS.toString() == selection)
+                    Data.sortBy = ColorEnum.BRIGHTNESS;
+                else if(ColorEnum.HUE.toString() == selection)
+                    Data.sortBy = ColorEnum.HUE;
+                else if(ColorEnum.SATURATION.toString() == selection)
+                    Data.sortBy = ColorEnum.SATURATION;
+                else if(ColorEnum.RED.toString() == selection)
+                    Data.sortBy = ColorEnum.RED;
+                else if(ColorEnum.GREEN.toString() == selection)
+                    Data.sortBy = ColorEnum.GREEN;
+                else if(ColorEnum.BLUE.toString() == selection)
+                    Data.sortBy = ColorEnum.BLUE;
+                
+                buildTree();
+                Data.panel.repaint();
+            }
+        });
         
-        changeTypeButton.setFocusable(false);
+        // So that we can scroll
         treeTypesChoice.setFocusable(false);
         showAllButton.setFocusable(false);
+        sortByChoice.setFocusable(false);
         
-        // this.add(changeTypeButton);
+        // Add components to view 
+        this.add(sortByChoice);
         this.add(showAllButton);
         this.add(treeTypesChoice);
         this.setFocusable(true);
@@ -88,6 +113,7 @@ public class Frame extends JFrame
         this.addKeyListener(new Input());
     }
 
+    // Constructs a tree from ground up
     private void buildTree() {
         if(Data.showPartialTree) {
             if (Data.visibleTree == TreeEnum.BST){
@@ -98,6 +124,12 @@ public class Frame extends JFrame
             for (int i = 0; i < Data.leafStep.get(Data.visibleTree); i++) {
                 Node node = Data.nodeList.get(i);
                 Data.partialTree.add(node);
+            }
+        } else {
+            Data.trees.put(Data.visibleTree, new Tree());
+
+            for (Node node : Data.nodeList) {
+                Data.trees.get(Data.visibleTree).add(node);
             }
         }
     }
