@@ -29,9 +29,11 @@ public class App {
                 JSONParser parser = new JSONParser();
                 Data.leafStep.put(TreeEnum.BST, 0);
                 Data.leafStep.put(TreeEnum.AVL, 0);
+                Data.leafStep.put(TreeEnum.MIN_HEAP, 0);
 
                 Data.trees.put(TreeEnum.BST, new Tree());
                 Data.trees.put(TreeEnum.AVL, new AVLTree());
+                Data.trees.put(TreeEnum.MIN_HEAP, new MinHeap());
 
                 try {
                     // Read JSON as array
@@ -52,8 +54,9 @@ public class App {
                         Data.nodeList.add(node);
 
                         // Add the color to tree
-                        Data.trees.get(TreeEnum.AVL).add(node);
                         Data.trees.get(TreeEnum.BST).add(node);
+                        Data.trees.get(TreeEnum.AVL).add(node);
+                        Data.trees.get(TreeEnum.MIN_HEAP).add(node);
                     }
 
                     // UI Config

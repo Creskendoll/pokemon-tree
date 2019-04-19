@@ -52,22 +52,6 @@
           </descriptorRefs>
         </configuration>
       </plugin>
-
-      <!-- Build an executable JAR -->
-      <!-- <plugin>
-      <groupId>org.apache.maven.plugins</groupId>
-      <artifactId>maven-jar-plugin</artifactId>
-      <version>3.1.0</version>
-      <configuration>
-        <archive>
-          <manifest>
-            <addClasspath>true</addClasspath>
-            <classpathPrefix>lib/</classpathPrefix>
-            <mainClass>com.bauproject.pokemontree.App</mainClass>
-          </manifest>
-        </archive>
-      </configuration>
-      </plugin> -->
     </plugins>
   </build>
 </project>

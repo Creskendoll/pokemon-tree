@@ -32,7 +32,8 @@ public class Node {
             this.image = ImageIO.read(imageFile);
         } catch (IOException e) {
             System.out.printf("Error reading file: %s", img_file_path);
-            e.printStackTrace();
+            // this.image = null;
+            // e.printStackTrace();
         }
     }
     Node(Color color, long index, long depth) {

@@ -2,8 +2,6 @@ package com.bauproject.pokemontree.structures;
 
 import java.util.ArrayList;
 
-import com.bauproject.pokemontree.Data;
-
 public class Tree implements ITree {
     Node root;
 
@@ -45,34 +43,11 @@ public class Tree implements ITree {
             // return new Node(color, index, depth);
         }
         
-        ColorEnum result = null;
-        switch (Data.sortBy) {
-            case BRIGHTNESS:
-                result = color.compareBrightness(current.color);
-                break;
-            case SATURATION:
-                result = color.compareSaturation(current.color);
-                break;
-            case HUE:
-                result = color.compareHue(current.color);
-                break;
-            case RED:
-                result = color.compareRGB(current.color)[0];
-                break;
-            case GREEN:
-                result = color.compareRGB(current.color)[1];
-                break;
-            case BLUE:
-                result = color.compareRGB(current.color)[2];
-                break;
-            default:
-                result = ColorEnum.EQUAL;
-                break;
-        }
+        ColorEnum compareResult = color.compare(current.color);
 
-        if (result == ColorEnum.LOWER) {
+        if (compareResult == ColorEnum.LOWER) {
             current.left = addRecursive(current.left, color, imgName, (current.getIndex() * 2) - 1, depth + 1);
-        } else if (result == ColorEnum.HIGHER) {
+        } else if (compareResult == ColorEnum.HIGHER) {
             current.right = addRecursive(current.right, color, imgName, current.getIndex() * 2, depth + 1);
         } else {
             // value already exists

@@ -5,5 +5,7 @@ public enum TreeEnum {
     POSTORDER,
     PREORDER,
     BST,
-    AVL
+    AVL,
+    MIN_HEAP,
+    MAX_HEAP
 }

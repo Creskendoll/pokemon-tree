@@ -76,11 +76,13 @@ public class TreePanel extends JPanel {
             
             @Override
             public void mouseDragged(MouseEvent e) {
-                int dx = e.getX() - mousePt.x;
-                int dy = e.getY() - mousePt.y;
-                at.translate(dx*1/scale, dy*1/scale);
-                mousePt = e.getPoint();
-                repaint();
+                if (e != null && mousePt != null) {
+                    int dx = e.getX() - mousePt.x;
+                    int dy = e.getY() - mousePt.y;
+                    at.translate(dx*1/scale, dy*1/scale);
+                    mousePt = e.getPoint();
+                    repaint();
+                }
             }
         });
     }
@@ -96,8 +98,8 @@ public class TreePanel extends JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int img_width =  (int)(30f * scale);
-        int img_height = (int)(30f * scale);
+        int img_width =  (int)(Data.nodeSize * scale);
+        int img_height = (int)(Data.nodeSize * scale);
         
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setColor(Color.darkGray);
@@ -154,10 +156,10 @@ public class TreePanel extends JPanel {
                 g2.drawImage(node.getImage(), node_X, node_Y, img_width, img_height, this);        
                 
                 g2.setColor(Color.white);
-                String indexInfo = "Index: " + String.valueOf(node.getIndex()); 
-                String depthInfo = "Depth: " + String.valueOf(node.getDepth());
-                g2.drawString(indexInfo, node_X, node_Y + img_height+20);
-                g2.drawString(depthInfo, node_X, node_Y + img_height+35);
+                // String indexInfo = "Index: " + String.valueOf(node.getIndex()); 
+                // String depthInfo = "Depth: " + String.valueOf(node.getDepth());
+                // g2.drawString(indexInfo, node_X, node_Y + img_height+20);
+                // g2.drawString(depthInfo, node_X, node_Y + img_height+35);
             }
         }
         g2.dispose();

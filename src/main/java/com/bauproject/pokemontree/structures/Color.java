@@ -2,6 +2,8 @@ package com.bauproject.pokemontree.structures;
 
 import java.util.ArrayList;
 
+import com.bauproject.pokemontree.Data;
+
 import org.json.simple.JSONArray;
 
 public class Color {
@@ -104,5 +106,24 @@ public class Color {
 
     public java.awt.Color toJavaColor() {
         return new java.awt.Color(this.red/255f, this.green/255f, this.blue/255f);
+    }
+
+    public ColorEnum compare(Color c2) {
+        switch (Data.sortBy) {
+            case BRIGHTNESS:
+                return this.compareBrightness(c2);
+            case SATURATION:
+                return this.compareSaturation(c2);
+            case HUE:
+                return this.compareHue(c2);
+            case RED:
+                return this.compareRGB(c2)[0];
+            case GREEN:
+                return this.compareRGB(c2)[1];
+            case BLUE:
+                return this.compareRGB(c2)[2];
+            default:
+                return ColorEnum.EQUAL;
+        }
     }
 }

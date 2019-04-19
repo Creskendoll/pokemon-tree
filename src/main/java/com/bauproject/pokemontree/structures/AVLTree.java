@@ -2,8 +2,6 @@ package com.bauproject.pokemontree.structures;
 
 import java.util.ArrayList;
 
-import com.bauproject.pokemontree.Data;
-
 // https://www.geeksforgeeks.org/avl-tree-set-1-insertion/
 // Java program for insertion in AVL Tree 
 public class AVLTree extends Tree { 
@@ -37,16 +35,16 @@ public class AVLTree extends Tree {
 		return (a > b) ? a : b;
 	}
 
-	private Node recursiveChangeDepthBy(Node node, long val) {
-		if (node == null)
-			return node;
-		else {
-			node.depth = val;
-			node.right = recursiveChangeDepthBy(node.right, val+1);
-			node.left = recursiveChangeDepthBy(node.left, val+1);
-		}
-		return node;
-	}
+	// private Node recursiveChangeDepthBy(Node node, long val) {
+	// 	if (node == null)
+	// 		return node;
+	// 	else {
+	// 		node.depth = val;
+	// 		node.right = recursiveChangeDepthBy(node.right, val+1);
+	// 		node.left = recursiveChangeDepthBy(node.left, val+1);
+	// 	}
+	// 	return node;
+	// }
 
 	private Node recursiveChangeIndexBy(Node node, long val) {
 		if (node == null)
@@ -62,21 +60,21 @@ public class AVLTree extends Tree {
 	// A utility function to right rotate subtree rooted with y 
 	// See the diagram given above. 
 	private Node rightRotate(Node y) { 
-		Node x = y.left; 
-		Node T2 = x.right; 
+		Node x = y.left;
+		Node T2 = x.right;
 		 
 		// Perform rotation 
 		x.right = y;
 		y.left = T2;
 		
 		// update depth
-		y.depth = max(height(y.left), height(y.right)) + 1; 
-		x.depth = max(height(x.left), height(x.right)) + 1; 
+		y.depth = max(height(y.left), height(y.right)) + 1;
+		x.depth = max(height(x.left), height(x.right)) + 1;
 		
-		x = recursiveChangeIndexBy(x, x.index);
+		// x = recursiveChangeIndexBy(x, x.index);
 
-		// Return new root 
-		return x; 
+		// Return new root
+		return x;
 	} 
 
 	// A utility function to left rotate subtree rooted with x 
@@ -85,17 +83,17 @@ public class AVLTree extends Tree {
 		Node y = x.right;
 		Node T2 = y.left;
 		
-		// Perform rotation 
+		// Perform rotation
 		y.left = x;
 		x.right = T2;
 
 		// Update heights 
-		x.depth = max(height(x.left), height(x.right)) + 1; 
+		x.depth = max(height(x.left), height(x.right)) + 1;
 		y.depth = max(height(y.left), height(y.right)) + 1;
 
-		y = recursiveChangeIndexBy(y, y.index);
+		// y = recursiveChangeIndexBy(y, y.index);
 
-		// Return new root 
+		// Return new root
 		return y;
 	} 
 
@@ -117,36 +115,13 @@ public class AVLTree extends Tree {
             // return new Node(color, index, depth);
         }
 
-        ColorEnum result = null;
-        switch (Data.sortBy) {
-            case BRIGHTNESS:
-                result = color.compareBrightness(node.color);
-                break;
-            case SATURATION:
-                result = color.compareSaturation(node.color);
-                break;
-            case HUE:
-                result = color.compareHue(node.color);
-				break;
-			case RED:
-				result = color.compareRGB(node.color)[0];
-				break;
-			case GREEN:
-				result = color.compareRGB(node.color)[1];
-				break;
-			case BLUE:
-				result = color.compareRGB(node.color)[2];
-				break;
-            default:
-                result = ColorEnum.EQUAL;
-                break;
-        }
+        ColorEnum compareResult = color.compare(node.color);
 
-		if (result == ColorEnum.LOWER) {
+		if (compareResult == ColorEnum.LOWER) {
             node.left = addRecursive(node.left, color, imgName, (node.getIndex() * 2) - 1, depth);
 			// node.left = recursiveChangeIndexBy(node.left, node.left.index);
 		}
-		else if (result == ColorEnum.HIGHER) {
+		else if (compareResult == ColorEnum.HIGHER) {
 			node.right = addRecursive(node.right, color, imgName, node.getIndex() * 2, depth);
 			// node.right = recursiveChangeIndexBy(node.right, node.right.index);
 		}
