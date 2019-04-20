@@ -14,8 +14,8 @@ public class MinHeap extends Tree{
 	{ 
 		this.size = 0;
 		Heap = new Node[this.maxsize + 1];
-		Heap[0] = new Node(new Color(0,0,0), "0001.png", 0, 0);
-	} 
+		Heap[0] = new Node(new Color(0,0,0), "0001.png", 1, 0);
+	}
 
 	// Function to return the position of 
 	// the parent for the node currently 
@@ -53,11 +53,15 @@ public class MinHeap extends Tree{
 	// Function to swap two nodes of the heap 
 	private void swap(int fpos, int spos) 
 	{ 
-		Node tmp; 
-		tmp = Heap[fpos]; 
-		Heap[fpos] = Heap[spos]; 
-		Heap[spos] = tmp; 
-	} 
+		Node tmp;
+		tmp = Heap[fpos];
+		Heap[fpos].index = Heap[spos].index;
+		Heap[fpos].depth = Heap[spos].depth;
+		Heap[fpos] = Heap[spos];
+		Heap[spos].index = tmp.index;
+		Heap[spos].depth = tmp.depth;
+		Heap[spos] = tmp;
+	}
 
 	// Function to heapify the node at pos 
 	private void minHeapify(int pos) 
@@ -93,13 +97,17 @@ public class MinHeap extends Tree{
 
 	// Function to insert a node into the heap 
 	public void insert(Node element) 
-	{ 
-		Heap[++size] = element; 
+	{
+		Node parentNode = Heap[size];
+		element.depth = parentNode.depth + 1;
+		element.index = parentNode.left == null ? (parentNode.index * 2) - 1 
+												: (parentNode.index * 2);
+		Heap[++size] = element;
 		int current = size; 
 
 		ColorEnum compareResult = Heap[current].color.compare(Heap[parent(current)].color); 
 		while (compareResult == ColorEnum.LOWER) { 
-			swap(current, parent(current)); 
+			swap(current, parent(current));
 			current = parent(current);
 			compareResult = Heap[current].color.compare(Heap[parent(current)].color);
 		} 
@@ -118,7 +126,9 @@ public class MinHeap extends Tree{
 
 	@Override
     public ArrayList<Node> toList() {
-        return new ArrayList<Node>(Arrays.asList(Heap));
+		Node[] headlessArr = new Node[Heap.length];
+		System.arraycopy(Heap, 1, headlessArr, 0, Heap.length-1);
+        return new ArrayList<Node>(Arrays.asList(headlessArr));
 	}
 	@Override
     public void add(Node node) {

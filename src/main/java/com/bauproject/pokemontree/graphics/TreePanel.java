@@ -25,14 +25,14 @@ public class TreePanel extends JPanel {
     private Point mousePt;
     AffineTransform at = new AffineTransform();
 
-    private static final int W = 1360;
-    private static final int H = 720;
-
     int canvasWidth = 4000;
     int canvasHeight = 2000;
 
     public TreePanel(JFrame f) {
+        super();
         final JFrame frame = f;
+        setPreferredSize(new Dimension(canvasWidth, canvasHeight));
+        setBackground(Color.darkGray);
 
         this.addMouseWheelListener(new MouseAdapter() {
 
@@ -54,8 +54,11 @@ public class TreePanel extends JPanel {
                 // System.out.printf("Window X:%.2f\nWindow Y:%.2f\n", windowLocation.getX(), windowLocation.getY());
                 AffineTransform _at = new AffineTransform();
                 _at.setToScale(scale, scale);
-                // _at.translate(-dx*1/scale, -dy*1/scale);
-                _at.translate(-dx, -dy);
+                // double z2 = delta < 0. ? 1.1 : 1/1.1;
+                double transformX = at.getTranslateX() - dx;
+                double transformY = at.getTranslateY() - dy;
+                // _at.translate((at.getTranslateX()-dx)*scale, (at.getTranslateY()-dy)*scale);
+                _at.translate(transformX*scale, transformY*scale);
                 // System.out.printf("Delta X:%.2f\nDelta Y:%.2f\n", dx, dy);
                 at = _at;
                 revalidate();
@@ -88,37 +91,28 @@ public class TreePanel extends JPanel {
     }
 
     @Override
-    public Dimension getPreferredSize() {
-        int w = (int)((float)W * scale);
-        int h = (int)((float)H * scale);
-        Dimension size = new Dimension(w, h);
-        return size;
-    }
-
-    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         int img_width =  (int)(Data.nodeSize * scale);
         int img_height = (int)(Data.nodeSize * scale);
         
         Graphics2D g2 = (Graphics2D) g.create();
-        g2.setColor(Color.darkGray);
-        g2.fillRect(0, 0, canvasWidth, canvasHeight);
-        
+        // g2.setColor(Color.darkGray);
+        // g2.fillRect(0, 0, canvasWidth, canvasHeight);
         g2.setTransform(at);
 
         // Name of the tree
         // g2.setColor(Color.white);
         // g2.drawString(Data.visibleTree.name(), W/2, 20);
-        Tree t = Data.trees.get(Data.visibleTree);
         int treeDepth = 0;
-
+        
         List<Node> iterList = null;
         if(Data.showPartialTree) { 
             iterList = Data.partialTree.toList();
             treeDepth = Data.partialTree.maxDepth();
         }
         else { 
+            Tree t = Data.trees.get(Data.visibleTree);
             iterList = t.toList();
             treeDepth =  t.maxDepth();
         }
@@ -150,12 +144,14 @@ public class TreePanel extends JPanel {
                 // int img_Y = (((node_index * img_height) / (int) Math.ceil((double)(getWidth() - img_width))) * img_height);
                 
                 // Draw nodes
-                g2.setColor(node.getColor().toJavaColor());
-                // g.fillOval(img_X, img_Y, node_width, node_height);
-                // g2.fillOval(node_X, node_Y, img_width, img_height);
-                g2.drawImage(node.getImage(), node_X, node_Y, img_width, img_height, this);        
+                if (!Data.showNodeColors)
+                    g2.drawImage(node.getImage(), node_X, node_Y, img_width, img_height, this);        
+                else {
+                    g2.setColor(node.getColor().toJavaColor());
+                    g2.fillOval(node_X, node_Y, img_width, img_height);
+                }
                 
-                g2.setColor(Color.white);
+                // g2.setColor(Color.white);
                 // String indexInfo = "Index: " + String.valueOf(node.getIndex()); 
                 // String depthInfo = "Depth: " + String.valueOf(node.getDepth());
                 // g2.drawString(indexInfo, node_X, node_Y + img_height+20);

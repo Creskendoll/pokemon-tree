@@ -1,14 +1,18 @@
 package com.bauproject.pokemontree.graphics;
 
 import java.awt.BorderLayout;
-import java.awt.Checkbox;
-import java.awt.Choice;
-import java.awt.Label;
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -28,29 +32,32 @@ public class Frame extends JFrame
     private static final long serialVersionUID = 1L;
     public Frame()  {
         super("Pokemon Tree");
+        Data.panel = new TreePanel(this);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setPreferredSize(new Dimension(1360, 720));
+        setBackground(Color.black);
 
         ImageIcon icon = new ImageIcon("./icon.png");
         this.setIconImage(icon.getImage());
 
         this.setLayout(new BorderLayout());
         // Tree types
-        Choice treeTypesChoice = new Choice();
-        treeTypesChoice.add(TreeEnum.BST.toString());
-        treeTypesChoice.add(TreeEnum.AVL.toString());
-        treeTypesChoice.add(TreeEnum.MIN_HEAP.toString());
+        JComboBox<String> treeTypesChoice = new JComboBox<String>();
+        treeTypesChoice.addItem(TreeEnum.BST.toString());
+        treeTypesChoice.addItem(TreeEnum.AVL.toString());
+        treeTypesChoice.addItem(TreeEnum.MIN_HEAP.toString());
         // Sort by options
-        Label sortLabel = new Label("Sort By:");
-        Choice sortByChoice = new Choice();
-        sortByChoice.add(ColorEnum.BRIGHTNESS.toString());
-        sortByChoice.add(ColorEnum.HUE.toString());
-        sortByChoice.add(ColorEnum.SATURATION.toString());
-        sortByChoice.add(ColorEnum.RED.toString());
-        sortByChoice.add(ColorEnum.GREEN.toString());
-        sortByChoice.add(ColorEnum.BLUE.toString());
+        JComboBox<String> sortByChoice = new JComboBox<String>();
+        sortByChoice.addItem(ColorEnum.BRIGHTNESS.toString());
+        sortByChoice.addItem(ColorEnum.HUE.toString());
+        sortByChoice.addItem(ColorEnum.SATURATION.toString());
+        sortByChoice.addItem(ColorEnum.RED.toString());
+        sortByChoice.addItem(ColorEnum.GREEN.toString());
+        sortByChoice.addItem(ColorEnum.BLUE.toString());
         // Partial Tree
-        Label partialLabel = new Label("Show Partial?");
-        Checkbox showPartialCheck = new Checkbox();
+        JCheckBox showPartialCheck = new JCheckBox("Show Partial? (Press Space)");
+        // Show node colors chech
+        JCheckBox showNodeColorsCheck = new JCheckBox("Show node colors?");
         // Size slider
         // https://docs.oracle.com/javase/tutorial/uiswing/components/slider.html
         JSlider sizeSlider = new JSlider(JSlider.HORIZONTAL,
@@ -58,28 +65,35 @@ public class Frame extends JFrame
         sizeSlider.setMajorTickSpacing(10);
         sizeSlider.setPaintTicks(true);
         Hashtable<Object, Object> labelTable = new Hashtable<Object, Object>();
-        labelTable.put( new Integer( 20 ), new JLabel("Small") );
-        labelTable.put( new Integer( 170 ), new JLabel("Big") );
+        labelTable.put( Integer.valueOf( 20 ), new JLabel("Small") );
+        labelTable.put( Integer.valueOf( 170 ), new JLabel("Big") );
         sizeSlider.setLabelTable( labelTable );
         sizeSlider.setPaintLabels(true);
         
-        treeTypesChoice.setBounds(50,50,100,50);
-        sortLabel.setBounds(200, 30, 100, 20);
-        sortByChoice.setBounds(200,50,100,50);
-        partialLabel.setBounds(350, 30, 100, 20);
-        showPartialCheck.setBounds(350,50,100,25);
-        sizeSlider.setBounds(500, 30, 300, 70);
-
+        treeTypesChoice.setBorder(BorderFactory.createRaisedBevelBorder());
+        showNodeColorsCheck.setBorder(BorderFactory.createRaisedBevelBorder());
+        showPartialCheck.setBorder(BorderFactory.createRaisedBevelBorder());
+        sortByChoice.setBorder(BorderFactory.createRaisedBevelBorder());
+        sizeSlider.setBorder(BorderFactory.createRaisedBevelBorder());
+        
         // Switch between partian and full view
         showPartialCheck.addItemListener(new ItemListener(){
         
             @Override
             public void itemStateChanged(ItemEvent e) {
                 Data.showPartialTree = e.getStateChange() == ItemEvent.SELECTED;
-                buildTree();
+                Data.panel.repaint();
             }
         });
 
+        showNodeColorsCheck.addItemListener(new ItemListener(){
+        
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                Data.showNodeColors = e.getStateChange() == ItemEvent.SELECTED;
+                Data.panel.repaint();
+            }
+        });
 
         // Select tree type 
         treeTypesChoice.addItemListener(new ItemListener(){
@@ -136,62 +150,72 @@ public class Frame extends JFrame
         showPartialCheck.setFocusable(false);
         sortByChoice.setFocusable(false);
         sizeSlider.setFocusable(false);
+        showNodeColorsCheck.setFocusable(false);
 
         // Add components to view 
-        this.add(sizeSlider);
-        this.add(sortByChoice);
-        this.add(showPartialCheck);
-        this.add(treeTypesChoice);
-        this.add(sortLabel);
-        this.add(partialLabel);
-        this.setFocusable(true);
-        this.requestFocusInWindow();
-        this.addKeyListener(new Input());
+        JPanel controlPanel = new JPanel();
+        controlPanel.setLayout(new GridLayout(1,5));
+        controlPanel.setBackground(Color.cyan);
+        
+        // controlPanel.add(Data.panel);
+        controlPanel.add(treeTypesChoice);
+        controlPanel.add(sortByChoice);
+        controlPanel.add(showNodeColorsCheck);
+        controlPanel.add(showPartialCheck);
+        controlPanel.add(sizeSlider);
+        
+        controlPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));;
+
+        add(controlPanel, BorderLayout.NORTH);
+
+        add(Data.panel, BorderLayout.CENTER);
+
+        setFocusable(true);
+        requestFocusInWindow();
+        addKeyListener(new Input());
+
+        setLocationRelativeTo(null);
+        pack();
     }
 
     // Constructs a tree from ground up
     private void buildTree() {
-        if(Data.showPartialTree) {
-            if (Data.visibleTree == TreeEnum.BST){
-                Data.partialTree = new Tree();
-            } else if (Data.visibleTree == TreeEnum.AVL) {
-                Data.partialTree = new AVLTree();
-            } else if (Data.visibleTree == TreeEnum.MIN_HEAP) {
-                Data.partialTree = new MinHeap();
-            }
-            for (int i = 0; i < Data.leafStep.get(Data.visibleTree); i++) {
-                Node node = Data.nodeList.get(i);
-                Data.partialTree.add(node);
-            }
-        } else {
-            switch (Data.visibleTree) {
-                case BST:
-                    Data.trees.put(Data.visibleTree, new Tree());
-                    break;
-                case AVL:
-                    Data.trees.put(Data.visibleTree, new AVLTree());    
-                    break;
-                case MIN_HEAP:
-                    Data.trees.put(Data.visibleTree, new MinHeap());        
-                    break;
-                default:            
-                    Data.trees.put(Data.visibleTree, new Tree());
-                    break;
-            }
-            for (Node node : Data.nodeList) {
-                Data.trees.get(Data.visibleTree).add(node);
-            }
+        if (Data.visibleTree == TreeEnum.BST){
+            Data.partialTree = new Tree();
+        } else if (Data.visibleTree == TreeEnum.AVL) {
+            Data.partialTree = new AVLTree();
+        } else if (Data.visibleTree == TreeEnum.MIN_HEAP) {
+            Data.partialTree = new MinHeap();
+        }
+        for (int i = 0; i < Data.leafStep.get(Data.visibleTree); i++) {
+            Data.partialTree.add(Data.nodeList.get(i));
+        }
+
+        Tree newTree;
+        switch (Data.visibleTree) {
+            case BST:
+                newTree = new Tree();
+                break;
+            case AVL:
+                newTree = new AVLTree();
+                break;
+            case MIN_HEAP:
+                newTree = new MinHeap();
+                break;
+            default:            
+                newTree = new MinHeap();
+                break;
+        }
+        Data.trees.put(Data.visibleTree, newTree);
+
+        for (Node node : Data.nodeList) {
+            Data.trees.get(Data.visibleTree).add(node);
         }
         Data.panel.repaint();
     }
     
     public void show(TreeEnum treeEnum) {
         Data.visibleTree = treeEnum;
-        Data.panel = new TreePanel(this);
-        
-        this.add(new JScrollPane(Data.panel));
-        this.pack();
-        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 }

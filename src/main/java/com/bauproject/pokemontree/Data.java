@@ -21,4 +21,5 @@ public class Data {
     public static JSONArray treeArray = new JSONArray();
     public static float nodeSize = 30f;
     public static ArrayList<Node> nodeList = new ArrayList<Node>();
+    public static boolean showNodeColors = false;
 }

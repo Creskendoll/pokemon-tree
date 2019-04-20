@@ -55,8 +55,8 @@ public class App {
 
                         // Add the color to tree
                         Data.trees.get(TreeEnum.BST).add(node);
-                        Data.trees.get(TreeEnum.AVL).add(node);
-                        Data.trees.get(TreeEnum.MIN_HEAP).add(node);
+                        // Data.trees.get(TreeEnum.AVL).add(node);
+                        // Data.trees.get(TreeEnum.MIN_HEAP).add(node);
                     }
 
                     // UI Config
