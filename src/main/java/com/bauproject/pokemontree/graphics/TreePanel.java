@@ -30,6 +30,8 @@ public class TreePanel extends JPanel {
 
     public TreePanel(JFrame f) {
         super();
+        // initial position
+        at.translate(-1336f, 10f);
         final JFrame frame = f;
         setPreferredSize(new Dimension(canvasWidth, canvasHeight));
         setBackground(Color.darkGray);
@@ -47,19 +49,21 @@ public class TreePanel extends JPanel {
                 // Point windowLocation = frame.getLocation();
                 // Point frameCenter = new Point((int)frame.getLocation().getX() + getWidth()/2, (int)frame.getLocation().getY() + getHeight()/2);
                 Point frameCenter = new Point((int)frame.getLocation().getX() + getWidth()/2, (int)frame.getLocation().getY() + getHeight()/2);
-                double dx = mouse_location.getX() - frameCenter.getX();
-                double dy = mouse_location.getY() - frameCenter.getY();
                 
                 // System.out.printf("Mouse X:%.2f\nMouse Y:%.2f\n", mouse_location.getX(), mouse_location.getY());
                 // System.out.printf("Window X:%.2f\nWindow Y:%.2f\n", windowLocation.getX(), windowLocation.getY());
                 AffineTransform _at = new AffineTransform();
                 _at.setToScale(scale, scale);
-                // double z2 = delta < 0. ? 1.1 : 1/1.1;
+
+                // calculate translation
+                double dx = mouse_location.getX() - frameCenter.getX();
+                double dy = mouse_location.getY() - frameCenter.getY();
                 double transformX = at.getTranslateX() - dx;
                 double transformY = at.getTranslateY() - dy;
                 // _at.translate((at.getTranslateX()-dx)*scale, (at.getTranslateY()-dy)*scale);
                 _at.translate(transformX*scale, transformY*scale);
-                // System.out.printf("Delta X:%.2f\nDelta Y:%.2f\n", dx, dy);
+                
+                // set old transform
                 at = _at;
                 revalidate();
                 repaint();
@@ -84,6 +88,8 @@ public class TreePanel extends JPanel {
                     int dy = e.getY() - mousePt.y;
                     at.translate(dx*1/scale, dy*1/scale);
                     mousePt = e.getPoint();
+                    // String log = String.format("X: %f, \n Y: %f", at.getTranslateX(), at.getTranslateY());
+                    // System.out.println(log);
                     repaint();
                 }
             }
@@ -110,8 +116,7 @@ public class TreePanel extends JPanel {
         if(Data.showPartialTree) { 
             iterList = Data.partialTree.toList();
             treeDepth = Data.partialTree.maxDepth();
-        }
-        else { 
+        } else {
             Tree t = Data.trees.get(Data.visibleTree);
             iterList = t.toList();
             treeDepth =  t.maxDepth();

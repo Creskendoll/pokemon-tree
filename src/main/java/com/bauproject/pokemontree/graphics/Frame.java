@@ -76,7 +76,7 @@ public class Frame extends JFrame
         sortByChoice.setBorder(BorderFactory.createRaisedBevelBorder());
         sizeSlider.setBorder(BorderFactory.createRaisedBevelBorder());
         
-        // Switch between partian and full view
+        // Switch between partial and full view
         showPartialCheck.addItemListener(new ItemListener(){
         
             @Override
@@ -174,7 +174,6 @@ public class Frame extends JFrame
         requestFocusInWindow();
         addKeyListener(new Input());
 
-        setLocationRelativeTo(null);
         pack();
     }
 
