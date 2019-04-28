@@ -7,7 +7,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -25,6 +24,7 @@ import com.bauproject.pokemontree.Input;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.Hashtable;
+import javax.imageio.ImageIO;
 
 
 public class Frame extends JFrame
@@ -37,15 +37,18 @@ public class Frame extends JFrame
         setPreferredSize(new Dimension(1360, 720));
         setBackground(Color.black);
 
-        ImageIcon icon = new ImageIcon("./icon.png");
-        this.setIconImage(icon.getImage());
+        try {
+            this.setIconImage(ImageIO.read(Frame.class.getResourceAsStream("/icon.png")));
+        } catch (Exception e) {
+            System.out.println("Error reading icon.png");
+        }
 
         this.setLayout(new BorderLayout());
         // Tree types
         JComboBox<String> treeTypesChoice = new JComboBox<String>();
         treeTypesChoice.addItem(TreeEnum.BST.toString());
-        treeTypesChoice.addItem(TreeEnum.AVL.toString());
-        treeTypesChoice.addItem(TreeEnum.MIN_HEAP.toString());
+        // treeTypesChoice.addItem(TreeEnum.AVL.toString());
+        // treeTypesChoice.addItem(TreeEnum.MIN_HEAP.toString());
         // Sort by options
         JComboBox<String> sortByChoice = new JComboBox<String>();
         sortByChoice.addItem(ColorEnum.BRIGHTNESS.toString());

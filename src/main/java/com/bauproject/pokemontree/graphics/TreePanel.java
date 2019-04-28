@@ -165,6 +165,4 @@ public class TreePanel extends JPanel {
         }
         g2.dispose();
     }
-
-
 }
